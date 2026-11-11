@@ -22,7 +22,9 @@ import {
   formatRupiah,
   formatCompact,
   formatDate,
-  getRelativeDayLabel
+  getRelativeDayLabel,
+  formatCurrencyInput,
+  parseCurrencyInput
 } from './lib/formatters.js';
 import {
   supabase,
@@ -688,6 +690,12 @@ function renderSettingsPage() {
 let selectedTxType = 'expense';
 
 function setupAddTransactionForm() {
+  const amountInput = document.getElementById('input-tx-amount');
+  if (amountInput && !amountInput.dataset.bound) {
+    formatCurrencyInput(amountInput);
+    amountInput.dataset.bound = 'true';
+  }
+
   const dateInput = document.getElementById('input-tx-date');
   if (dateInput && !dateInput.value) {
     dateInput.value = new Date().toISOString().split('T')[0];
@@ -790,11 +798,11 @@ function openAddPocketModal() {
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Saldo Awal (Rp)</label>
-        <input id="input-pocket-initial" type="number" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs" min="0" required>
+        <input id="input-pocket-initial" type="text" inputmode="numeric" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required>
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Target Saldo (Opsional)</label>
-        <input id="input-pocket-target" type="number" placeholder="Kosongkan jika tidak ada target" class="w-full glass-input rounded-xl py-3 px-3 text-xs" min="0">
+        <input id="input-pocket-target" type="text" inputmode="numeric" placeholder="Kosongkan jika tidak ada target" class="w-full glass-input rounded-xl py-3 px-3 text-xs">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
@@ -820,10 +828,13 @@ function openAddPocketModal() {
     </form>
   `);
 
+  formatCurrencyInput(document.getElementById('input-pocket-initial'));
+  formatCurrencyInput(document.getElementById('input-pocket-target'));
+
   document.getElementById('form-add-pocket')?.addEventListener('submit', async () => {
     const name = document.getElementById('input-pocket-name')?.value.trim();
-    const initial = Number(document.getElementById('input-pocket-initial')?.value) || 0;
-    const target = Number(document.getElementById('input-pocket-target')?.value) || null;
+    const initial = parseCurrencyInput(document.getElementById('input-pocket-initial'));
+    const target = parseCurrencyInput(document.getElementById('input-pocket-target')) || null;
     const icon = document.getElementById('input-pocket-icon')?.value || 'fa-wallet';
     const color = document.getElementById('input-pocket-color')?.value || '#5b55f9';
 
@@ -867,7 +878,7 @@ function openSetBudgetModal() {
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Batas Maksimal Pengeluaran (Rp)</label>
-        <input id="input-budget-limit" type="number" placeholder="misal: 1500000" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required min="1000">
+        <input id="input-budget-limit" type="text" inputmode="numeric" placeholder="misal: 1.500.000" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required>
       </div>
       <div class="pt-3">
         <button type="submit" class="w-full btn-gradient rounded-xl py-3.5 font-semibold text-xs text-white">
@@ -877,9 +888,11 @@ function openSetBudgetModal() {
     </form>
   `);
 
+  formatCurrencyInput(document.getElementById('input-budget-limit'));
+
   document.getElementById('form-set-budget')?.addEventListener('submit', async () => {
     const catName = document.getElementById('input-budget-cat')?.value;
-    const limit = Number(document.getElementById('input-budget-limit')?.value) || 0;
+    const limit = parseCurrencyInput(document.getElementById('input-budget-limit'));
     const m = new Date().getMonth() + 1;
     const y = new Date().getFullYear();
 
@@ -937,7 +950,7 @@ function openAddDebtModal() {
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Total Nominal (Rp)</label>
-        <input id="input-debt-total" type="number" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required min="1">
+        <input id="input-debt-total" type="text" inputmode="numeric" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required>
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Tanggal Jatuh Tempo (Opsional)</label>
@@ -955,10 +968,12 @@ function openAddDebtModal() {
     </form>
   `);
 
+  formatCurrencyInput(document.getElementById('input-debt-total'));
+
   document.getElementById('form-add-debt')?.addEventListener('submit', async () => {
     const type = document.getElementById('input-debt-type')?.value;
     const person = document.getElementById('input-debt-person')?.value.trim();
-    const total = Number(document.getElementById('input-debt-total')?.value) || 0;
+    const total = parseCurrencyInput(document.getElementById('input-debt-total'));
     const due = document.getElementById('input-debt-due')?.value || null;
     const notes = document.getElementById('input-debt-notes')?.value.trim() || '';
 
@@ -1007,7 +1022,7 @@ window.openPayDebtModal = function(debtId) {
     <form id="form-pay-debt" class="space-y-3.5" onsubmit="return false;">
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Nominal Cicilan (Rp)</label>
-        <input id="input-pay-amount" type="number" value="${remaining}" max="${remaining}" min="1000" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required>
+        <input id="input-pay-amount" type="text" inputmode="numeric" value="${new Intl.NumberFormat('id-ID').format(remaining)}" class="w-full glass-input rounded-xl py-3 px-3 text-xs" required>
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">
@@ -1031,8 +1046,10 @@ window.openPayDebtModal = function(debtId) {
     </form>
   `);
 
+  formatCurrencyInput(document.getElementById('input-pay-amount'));
+
   document.getElementById('form-pay-debt')?.addEventListener('submit', async () => {
-    const amount = Number(document.getElementById('input-pay-amount')?.value) || 0;
+    const amount = parseCurrencyInput(document.getElementById('input-pay-amount'));
     const pocketId = document.getElementById('select-pay-pocket')?.value;
     const notes = document.getElementById('input-pay-notes')?.value.trim();
 
@@ -1090,7 +1107,7 @@ function openAddAssetModal() {
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Estimasi Nilai (Rp)</label>
-        <input id="input-asset-value" type="number" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs" min="0">
+        <input id="input-asset-value" type="text" inputmode="numeric" placeholder="0" class="w-full glass-input rounded-xl py-3 px-3 text-xs">
       </div>
       <div>
         <label class="text-[11px] text-gray-400 font-medium mb-1 block">Catatan</label>
@@ -1103,6 +1120,8 @@ function openAddAssetModal() {
       </div>
     </form>
   `);
+
+  formatCurrencyInput(document.getElementById('input-asset-value'));
 
   const catSelect = document.getElementById('input-asset-cat');
   const pocketLinkField = document.getElementById('field-asset-pocket-link');
@@ -1118,7 +1137,7 @@ function openAddAssetModal() {
     const category = catSelect?.value;
     const name = document.getElementById('input-asset-name')?.value.trim();
     const linkedPocket = document.getElementById('input-asset-linked-pocket')?.value || null;
-    const value = Number(document.getElementById('input-asset-value')?.value) || 0;
+    const value = parseCurrencyInput(document.getElementById('input-asset-value'));
     const notes = document.getElementById('input-asset-notes')?.value.trim();
 
     if (!name) return;
@@ -1589,7 +1608,7 @@ function bindAppEvents() {
 
   // Save Transaction Submit
   document.getElementById('form-add-transaction')?.addEventListener('submit', async () => {
-    const amount = Number(document.getElementById('input-tx-amount')?.value) || 0;
+    const amount = parseCurrencyInput(document.getElementById('input-tx-amount'));
     const sourcePocket = document.getElementById('select-tx-source-pocket')?.value;
     const destPocket = document.getElementById('select-tx-dest-pocket')?.value;
     const categoryName = document.getElementById('input-tx-category')?.value.trim();

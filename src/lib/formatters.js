@@ -91,3 +91,34 @@ export function getRelativeDayLabel(dateStr) {
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
+/**
+ * Bind input field agar otomatis memformat ribuan titik secara real-time saat diketik (misal: 100.000)
+ * @param {HTMLInputElement} inputEl
+ */
+export function formatCurrencyInput(inputEl) {
+  if (!inputEl) return;
+  inputEl.type = 'text';
+  inputEl.inputMode = 'numeric';
+
+  inputEl.addEventListener('input', (e) => {
+    let val = e.target.value.replace(/\D/g, '');
+    if (!val) {
+      e.target.value = '';
+      return;
+    }
+    e.target.value = new Intl.NumberFormat('id-ID').format(Number(val));
+  });
+}
+
+/**
+ * Parsing nilai angka bersih dari input yang berformat ribuan titik
+ * @param {string|HTMLInputElement} input
+ * @returns {number}
+ */
+export function parseCurrencyInput(input) {
+  const val = typeof input === 'string' ? input : (input?.value || '0');
+  const clean = val.replace(/\D/g, '');
+  return Number(clean) || 0;
+}
+
+
