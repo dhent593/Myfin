@@ -53,21 +53,21 @@ body {
 
 /* Mobile Frame */
 .mobile-container { 
-    max-width: 420px; 
+    max-width: 375px; 
     margin: 0 auto; 
     height: 100vh; 
     position: relative; 
-    box-shadow: 0 0 50px rgba(0,0,0,0.6); 
+    box-shadow: 0 0 40px rgba(0,0,0,0.5); 
     overflow: hidden; 
 }
 
 @media (min-width: 640px) { 
     .mobile-container { 
-        height: 844px; 
-        border-radius: 44px; 
-        margin-top: 1.5rem; 
-        margin-bottom: 1.5rem; 
-        border: 4px solid rgba(255, 255, 255, 0.05);
+        height: 812px; 
+        border-radius: 40px; 
+        margin-top: 2rem; 
+        margin-bottom: 2rem; 
+        box-shadow: 0 0 45px rgba(0,0,0,0.6);
     } 
 }
 
@@ -102,7 +102,19 @@ body {
     z-index: 5; 
 }
 
+/* Floating Rounded Island Nav Bar */
 .nav-bar { 
+    position: absolute;
+    bottom: 1.25rem;
+    left: 1rem;
+    right: 1rem;
+    height: 68px;
+    border-radius: 28px;
+    background: rgba(26, 27, 47, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
     z-index: 30; 
 }
@@ -173,8 +185,9 @@ body.light-mode .glass-input:focus {
 
 /* Nav bar overrides */
 body.light-mode .nav-bar { 
-    background-color: rgba(255, 255, 255, 0.95) !important; 
-    border-top: 1px solid rgba(0,0,0,0.08) !important; 
+    background-color: rgba(255, 255, 255, 0.88) !important; 
+    border: 1px solid rgba(0,0,0,0.08) !important; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
 }
 
 /* Keep gradient contents white */
