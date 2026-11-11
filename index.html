@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Dompetku - Keuangan & Manajemen Aset</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#0b0c16">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dompetku">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="/icon.svg">
+    <link rel="apple-touch-icon" href="/icon.svg">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- App Entry & Styles -->
+    <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="mobile-container app-bg w-full relative">
+        
+        <!-- ==================================================================== -->
+        <!-- PAGE 1: ONBOARDING                                                   -->
+        <!-- ==================================================================== -->
+        <div id="page-onboarding" class="page-container page-active hide-scroll pb-6">
+            <div class="relative h-[55%] w-full flex items-center justify-center overflow-hidden">
+                <div class="shape-blob w-44 h-44 bg-purple-600/40 top-10 left-[-20px]"></div>
+                <div class="shape-blob w-36 h-36 bg-blue-500/30 bottom-10 right-10"></div>
+                <div class="relative z-10 card-gradient w-68 h-44 rounded-3xl transform rotate-[-12deg] shadow-2xl border border-white/20 p-6 flex flex-col justify-between">
+                    <div class="flex justify-between items-center opacity-85 text-xs text-white">
+                        <span class="tracking-widest font-semibold"><i class="fas fa-wallet mr-1.5"></i> DOMPETKU</span>
+                        <i class="fas fa-wifi opacity-75"></i>
+                    </div>
+                    <div class="text-white">
+                        <p class="text-[11px] opacity-75 font-medium">Total Net Worth</p>
+                        <h2 id="onboarding-balance" class="text-2xl font-bold tracking-tight">Rp 20.982.000</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 h-[45%] flex flex-col justify-end pb-10 relative z-10">
+                <div class="mb-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass text-[11px] text-purple-300 w-fit">
+                    <i class="fas fa-sparkles text-[10px]"></i> Smart Financial PWA
+                </div>
+                <h1 class="text-[28px] font-bold leading-tight mb-2">Kelola Keuangan<br>& Aset Impianmu</h1>
+                <p class="text-gray-400 text-xs mb-8 leading-relaxed">Pencatatan multi-kantong otomatis, budgeting pintar, pelacakan hutang & investasi dalam satu genggaman.</p>
+                <button id="btn-get-started" class="w-full btn-gradient rounded-2xl py-4 font-semibold text-sm shadow-[0_8px_25px_rgba(91,85,249,0.35)] hover:opacity-95 active:scale-[0.98] transition text-white">
+                    Mulai Sekarang <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 2: SIGN IN & REGISTER (Tabbed)                                   -->
+        <!-- ==================================================================== -->
+        <div id="page-signin" class="page-container page-hidden-right hide-scroll">
+            <div class="min-h-full flex flex-col justify-center px-6 py-10">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-2xl card-gradient flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-shield-alt text-base"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold leading-tight">Dompetku</h1>
+                        <p class="text-xs text-gray-400">Masuk untuk mengelola keuangan</p>
+                    </div>
+                </div>
+
+                <!-- Tab Auth Switcher -->
+                <div class="flex gap-2 p-1.5 rounded-2xl glass mb-6">
+                    <button id="tab-auth-login" class="flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white">
+                        Masuk
+                    </button>
+                    <button id="tab-auth-register" class="flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
+                        Daftar Baru
+                    </button>
+                </div>
+                
+                <!-- Form Inputs -->
+                <form id="form-auth" class="space-y-4" onsubmit="return false;">
+                    <!-- Full Name (Only shown on register) -->
+                    <div id="field-fullname" class="hidden">
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Nama Lengkap</label>
+                        <div class="relative">
+                            <i class="fas fa-id-card absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                            <input id="input-fullname" type="text" placeholder="Budi Santoso" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm relative z-0">
+                        </div>
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Username</label>
+                        <div class="relative">
+                            <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                            <input id="input-username" type="text" placeholder="username_anda" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm relative z-0" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Password</label>
+                        <div class="relative">
+                            <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                            <input id="input-password" type="password" placeholder="Minimal 6 karakter" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-11 text-sm tracking-wider relative z-0" required>
+                            <i id="btn-toggle-password" class="fas fa-eye absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm cursor-pointer hover:text-white transition z-10"></i>
+                        </div>
+                    </div>
+
+                    <div id="auth-info" class="text-[11px] text-gray-400 flex items-center justify-between pt-1">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="auth-remember" checked class="rounded border-gray-600 bg-transparent text-[#5b55f9] focus:ring-0">
+                            <span>Ingat saya</span>
+                        </label>
+                        <button type="button" id="btn-quick-demo" class="text-[#8b5cf6] hover:underline font-medium">Demo Mode</button>
+                    </div>
+
+                    <div class="pt-4 space-y-3">
+                        <button id="btn-submit-auth" type="submit" class="w-full btn-gradient rounded-xl py-3.5 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-95 active:scale-[0.98] transition text-white">
+                            Masuk ke Akun
+                        </button>
+                        <button type="button" id="btn-open-supabase-setup" class="w-full glass rounded-xl py-3 text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/10 transition flex items-center justify-center gap-2">
+                            <i class="fas fa-database text-xs text-emerald-400"></i> Setup Supabase Database
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 3: HOME / DASHBOARD                                             -->
+        <!-- ==================================================================== -->
+        <div id="page-home" class="page-container page-hidden-right hide-scroll pb-[100px]">
+            <!-- Header Top -->
+            <div class="p-6 flex justify-between items-center pt-10">
+                <div>
+                    <p class="text-gray-400 text-xs mb-0.5">Selamat datang,</p>
+                    <h1 id="user-display-name" class="text-xl font-bold tracking-wide">Pengguna</h1>
+                </div>
+                <div class="flex gap-2.5">
+                    <button id="btn-quick-add-tx" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 active:scale-95 transition" title="Tambah Transaksi">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                    <button id="btn-home-profile" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 active:scale-95 transition" title="Profil">
+                        <i class="fas fa-user text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Net Worth Card -->
+            <div class="px-6 mb-6">
+                <div class="card-gradient rounded-[26px] p-6 relative overflow-hidden shadow-[0_15px_35px_rgba(91,85,249,0.35)] text-white">
+                    <div class="absolute top-0 right-0 w-36 h-36 bg-white/20 rounded-full -mr-10 -mt-10 blur-2xl"></div>
+                    <div class="absolute bottom-0 left-0 w-28 h-28 bg-white/10 rounded-full -ml-8 -mb-8 blur-xl"></div>
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="tracking-wider text-xs font-semibold uppercase opacity-90 flex items-center gap-1.5">
+                                <i class="fas fa-wallet"></i> Total Saldo & Aset
+                            </span>
+                            <span id="active-pocket-count" class="text-[10px] bg-white/20 px-2.5 py-0.5 rounded-full font-medium">1 Kantong</span>
+                        </div>
+                        <p class="text-xs opacity-75 mb-1 font-medium">Net Worth Aktual</p>
+                        <div class="flex justify-between items-end">
+                            <h2 id="total-net-worth" class="text-3xl font-extrabold tracking-tight">Rp 0</h2>
+                            <span class="text-[10px] opacity-80 font-medium tracking-wide bg-white/10 px-2 py-1 rounded-lg">Real-time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="px-6 flex gap-3 mb-6">
+                <button id="btn-quick-transfer" class="flex-1 btn-gradient rounded-2xl py-3.5 px-4 flex justify-between items-center font-semibold text-xs shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-95 active:scale-[0.98] transition text-white">
+                    <span>Pindah Dana</span> <i class="fas fa-paper-plane text-xs"></i>
+                </button>
+                <button id="btn-quick-add-pocket" class="flex-1 glass rounded-2xl py-3.5 px-4 flex justify-between items-center font-semibold text-xs hover:bg-white/10 active:scale-[0.98] transition">
+                    <span>+ Kantong Baru</span> <i class="fas fa-folder-plus text-xs text-purple-400"></i>
+                </button>
+            </div>
+
+            <!-- Primary Pocket Snapshot Slider -->
+            <div class="px-6 mb-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-sm">Daftar Kantong</h3>
+                    <span id="link-view-all-pockets" class="text-xs text-gray-400 hover:text-white transition cursor-pointer">Kelola & Urutkan</span>
+                </div>
+                <div id="home-pockets-list" class="space-y-2.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Recent Transactions Section -->
+            <div class="px-6">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-sm">Transaksi Terkini</h3>
+                    <span id="link-see-all-tx" class="text-xs text-gray-400 hover:text-white transition cursor-pointer">Lihat Semua</span>
+                </div>
+                <div id="home-recent-transactions" class="space-y-2.5">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 4: STATISTICS & BUDGETING                                       -->
+        <!-- ==================================================================== -->
+        <div id="page-stats" class="page-container page-hidden-right hide-scroll pb-[100px]">
+            <div class="p-6 flex justify-between items-center pt-10">
+                <button id="btn-stats-back" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+                <h2 class="font-bold text-base">Analisis & Anggaran</h2>
+                <button id="btn-open-set-budget" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition" title="Atur Anggaran">
+                    <i class="fas fa-sliders-h text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="px-6 mb-6 space-y-6">
+                <!-- Summary Card -->
+                <div class="glass rounded-[24px] p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-400 font-medium">Pengeluaran Bulan Ini</span>
+                        <span id="stats-current-month-badge" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full">Bulan Ini</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <h2 id="stats-total-expense" class="text-2xl font-bold">Rp 0</h2>
+                        <span id="stats-expense-ratio-pill" class="text-[11px] font-semibold px-2.5 py-1 rounded-xl bg-red-500/20 text-red-300">
+                            Pengeluaran
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Donut Chart SVG Container -->
+                <div class="glass rounded-[24px] p-5">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-xs uppercase tracking-wider text-gray-300">Porsi Pengeluaran</h3>
+                        <span class="text-[10px] text-gray-400">SVG Donut Chart</span>
+                    </div>
+                    <div id="stats-donut-container" class="min-h-[220px]">
+                        <!-- Rendered by DonutChart.js -->
+                    </div>
+                </div>
+
+                <!-- Monthly Budgets List with Progress & Expandable Transactions -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-sm">Anggaran Bulanan</h3>
+                        <button id="btn-add-budget-link" class="text-xs text-purple-400 hover:underline">+ Pasang Budget</button>
+                    </div>
+                    <div id="stats-budget-list" class="space-y-3">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 5: WALLET, POCKETS & ASSETS                                     -->
+        <!-- ==================================================================== -->
+        <div id="page-wallet" class="page-container page-hidden-right hide-scroll pb-[100px]">
+            <div class="p-6 flex justify-between items-center pt-10">
+                <h1 class="text-xl font-bold tracking-wide">Kantong & Aset</h1>
+                <div class="flex gap-2">
+                    <button id="btn-add-pocket-modal" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition" title="Tambah Kantong">
+                        <i class="fas fa-plus text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Switcher: Kantong vs Aset Berharga -->
+            <div class="px-6 mb-5">
+                <div class="flex gap-2 p-1.5 rounded-2xl glass">
+                    <button id="tab-wallet-pockets" class="flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white">
+                        Kantong (<span id="wallet-pockets-count">0</span>)
+                    </button>
+                    <button id="tab-wallet-assets" class="flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
+                        Aset Berharga (<span id="wallet-assets-count">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab 1: Pockets View (Supports Drag & Drop Reordering) -->
+            <div id="view-wallet-pockets" class="px-6 space-y-4">
+                <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+                    <span><i class="fas fa-grip-vertical mr-1 text-[10px]"></i> Tekan & geser untuk mengatur urutan</span>
+                    <span id="reorder-status" class="text-[10px] text-green-400 hidden">Tersimpan</span>
+                </div>
+                <div id="wallet-pockets-container" class="space-y-3">
+                    <!-- Populated dynamically with SortableJS -->
+                </div>
+            </div>
+
+            <!-- Tab 2: Assets View (With Pocket Sync Integration) -->
+            <div id="view-wallet-assets" class="px-6 space-y-4 hidden">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs text-gray-400">Emas, Investasi, Properti & Simpanan</p>
+                    <button id="btn-open-add-asset" class="text-xs text-purple-400 hover:underline font-semibold">+ Tambah Aset</button>
+                </div>
+                <div id="wallet-assets-container" class="space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 6: DEBTS & RECEIVABLES (Hutang & Piutang)                        -->
+        <!-- ==================================================================== -->
+        <div id="page-debts" class="page-container page-hidden-right hide-scroll pb-[100px]">
+            <div class="p-6 flex justify-between items-center pt-10">
+                <button id="btn-debts-back" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+                <h2 class="font-bold text-base">Hutang & Piutang</h2>
+                <button id="btn-open-add-debt" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition" title="Tambah Catatan">
+                    <i class="fas fa-plus text-sm"></i>
+                </button>
+            </div>
+
+            <div class="px-6 space-y-5">
+                <!-- Status Filter Tabs: Aktif vs Lunas -->
+                <div class="flex gap-2 p-1.5 rounded-2xl glass">
+                    <button id="filter-debt-active" class="flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white">
+                        Aktif / Berjalan
+                    </button>
+                    <button id="filter-debt-settled" class="flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
+                        Sudah Lunas
+                    </button>
+                </div>
+
+                <!-- Debts List -->
+                <div id="debts-list-container" class="space-y-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 7: SETTINGS & ANNUAL REPORT                                     -->
+        <!-- ==================================================================== -->
+        <div id="page-settings" class="page-container page-hidden-right hide-scroll pb-[100px]">
+            <div class="p-6 pt-12 mb-1">
+                <h1 class="text-2xl font-bold tracking-wide">Pengaturan</h1>
+            </div>
+            
+            <!-- User Profile Summary Header -->
+            <div class="px-6 mb-6 flex items-center gap-4">
+                <div class="w-16 h-16 rounded-full glass border border-white/20 flex items-center justify-center text-2xl relative shadow-lg">
+                    <i class="fas fa-user-circle text-gray-300 text-3xl"></i>
+                    <div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-[#1a1b2f] rounded-full"></div>
+                </div>
+                <div class="flex-1 overflow-hidden">
+                    <h2 id="settings-user-fullname" class="font-bold text-base leading-tight truncate">Pengguna</h2>
+                    <p id="settings-user-username" class="text-xs text-gray-400 truncate">@username</p>
+                </div>
+                <button id="btn-open-edit-profile" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 active:scale-95 transition" title="Edit Profil">
+                    <i class="fas fa-pen text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Settings Menu Items -->
+            <div class="px-6 space-y-2.5">
+                <!-- Theme Toggle -->
+                <div id="btn-toggle-theme" class="glass p-4 rounded-[18px] flex items-center justify-between cursor-pointer hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+                            <i id="theme-icon" class="fas fa-moon text-gray-300"></i>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs block">Tema Gelap / Terang</span>
+                            <span class="text-[10px] text-gray-400">Sesuaikan mode tampilan</span>
+                        </div>
+                    </div>
+                    <div id="theme-toggle-bg" class="w-11 h-6 bg-gray-600 rounded-full relative transition-colors duration-300">
+                        <div id="theme-toggle-ball" class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Annual Report Full-screen Trigger -->
+                <div id="btn-open-annual-report" class="glass p-4 rounded-[18px] flex items-center justify-between cursor-pointer hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-purple-400">
+                            <i class="fas fa-file-invoice text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs block">Laporan Tahunan Lengkap</span>
+                            <span class="text-[10px] text-gray-400">Rasio tabungan & grafik batang</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                </div>
+
+                <!-- Debts Shortcut -->
+                <div id="btn-settings-debts-shortcut" class="glass p-4 rounded-[18px] flex items-center justify-between cursor-pointer hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-amber-400">
+                            <i class="fas fa-hand-holding-usd text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs block">Hutang & Piutang</span>
+                            <span class="text-[10px] text-gray-400">Pelacakan cicilan & jatuh tempo</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                </div>
+
+                <!-- Supabase Cloud Sync Config -->
+                <div id="btn-settings-supabase" class="glass p-4 rounded-[18px] flex items-center justify-between cursor-pointer hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-emerald-400">
+                            <i class="fas fa-cloud text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs block">Koneksi Database Supabase</span>
+                            <span id="supabase-status-pill" class="text-[10px] text-emerald-400 font-medium">Terhubung</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                </div>
+
+                <!-- Archive Old Year Data (Performance optimization) -->
+                <div id="btn-archive-data" class="glass p-4 rounded-[18px] flex items-center justify-between cursor-pointer hover:bg-white/10 transition">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-cyan-400">
+                            <i class="fas fa-archive text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs block">Arsip Transaksi Tahun Lalu</span>
+                            <span class="text-[10px] text-gray-400">Optimasi performa & kecepatan</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-xs text-gray-500"></i>
+                </div>
+            </div>
+            
+            <!-- Log Out Button -->
+            <div class="px-6 mt-6">
+                <button id="btn-logout" class="w-full glass border border-red-500/25 text-red-400 rounded-2xl py-3.5 font-semibold text-xs hover:bg-red-500/10 active:scale-[0.98] transition flex justify-center items-center gap-2">
+                    <i class="fas fa-sign-out-alt"></i> Keluar dari Akun
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 8: TRANSACTIONS (See All & Filter)                              -->
+        <!-- ==================================================================== -->
+        <div id="page-transactions" class="page-container page-hidden-right hide-scroll pb-6">
+            <div class="p-6 pt-10 sticky top-0 app-bg z-20 border-b border-white/5 transition-colors duration-400">
+                <div class="flex justify-between items-center mb-4">
+                    <button id="btn-tx-back" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <h2 class="font-bold text-base">Riwayat Transaksi</h2>
+                    <button id="btn-export-csv" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition text-emerald-400" title="Unduh CSV">
+                        <i class="fas fa-file-csv text-base"></i>
+                    </button>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative mb-3">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs"></i>
+                    <input id="input-search-tx" type="text" placeholder="Cari keterangan atau kategori..." class="w-full glass-input rounded-xl py-2.5 pl-10 pr-4 text-xs">
+                </div>
+
+                <!-- Instant Filter Tabs -->
+                <div class="flex gap-2">
+                    <button data-tab="all" class="btn-filter-tab flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition bg-white/10 text-white">Semua</button>
+                    <button data-tab="this_month" class="btn-filter-tab flex-1 py-1.5 rounded-lg text-[11px] font-semibold text-gray-400 hover:text-white transition">Bulan Ini</button>
+                    <button data-tab="this_week" class="btn-filter-tab flex-1 py-1.5 rounded-lg text-[11px] font-semibold text-gray-400 hover:text-white transition">Minggu Ini</button>
+                </div>
+            </div>
+            
+            <div class="px-6 mt-4 space-y-5">
+                <div id="transactions-grouped-list" class="space-y-4">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- PAGE 9: ADD TRANSACTION & TRANSFER                                   -->
+        <!-- ==================================================================== -->
+        <div id="page-add-transaction" class="page-container page-hidden-right hide-scroll pb-8">
+            <div class="p-6 pt-10 sticky top-0 app-bg z-20 border-b border-white/5 transition-colors duration-400">
+                <div class="flex justify-between items-center">
+                    <button id="btn-add-tx-back" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <h2 class="font-bold text-base">Catat Transaksi</h2>
+                    <div class="w-10"></div>
+                </div>
+            </div>
+            
+            <form id="form-add-transaction" class="px-6 mt-6" onsubmit="return false;">
+                <!-- Amount Input -->
+                <div class="text-center mb-6">
+                    <p class="text-[11px] text-gray-400 mb-2 font-medium uppercase tracking-wider">Masukkan Nominal</p>
+                    <div class="flex justify-center items-center">
+                        <span class="text-2xl font-bold text-gray-400 mr-2">Rp</span>
+                        <input id="input-tx-amount" type="number" placeholder="0" class="w-56 bg-transparent text-4xl font-extrabold text-center outline-none text-white" required min="1">
+                    </div>
+                </div>
+
+                <!-- 3 Type Selector: Expense, Income, Transfer -->
+                <div class="flex gap-1.5 mb-5 bg-white/5 p-1 rounded-2xl border border-white/10 glass">
+                    <button type="button" id="btn-tx-type-expense" class="flex-1 rounded-xl py-2 text-xs font-semibold transition-all bg-white/10 shadow-sm text-white">
+                        Pengeluaran
+                    </button>
+                    <button type="button" id="btn-tx-type-income" class="flex-1 rounded-xl py-2 text-xs font-semibold text-gray-400 hover:text-white transition-all">
+                        Pemasukan
+                    </button>
+                    <button type="button" id="btn-tx-type-transfer" class="flex-1 rounded-xl py-2 text-xs font-semibold text-gray-400 hover:text-white transition-all">
+                        Transfer
+                    </button>
+                </div>
+
+                <!-- Form Inputs -->
+                <div class="space-y-3.5">
+                    <!-- Source Pocket -->
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Dari Kantong</label>
+                        <div class="relative">
+                            <i class="fas fa-wallet absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs z-10"></i>
+                            <select id="select-tx-source-pocket" class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-xs appearance-none" required>
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Destination Pocket (Only for Transfer) -->
+                    <div id="field-dest-pocket" class="hidden">
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Ke Kantong Tujuan</label>
+                        <div class="relative">
+                            <i class="fas fa-arrow-right-arrow-left absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs z-10"></i>
+                            <select id="select-tx-dest-pocket" class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-xs appearance-none">
+                                <!-- Populated dynamically -->
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <!-- Category (Smart Auto-register) -->
+                    <div id="field-category">
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Kategori Transaksi</label>
+                        <div class="relative">
+                            <i class="fas fa-tag absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs z-10"></i>
+                            <input id="input-tx-category" type="text" list="category-datalist" placeholder="Ketik atau pilih kategori..." class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-xs" required>
+                            <datalist id="category-datalist">
+                                <!-- Populated dynamically -->
+                            </datalist>
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1 italic">*Jika mengetik nama baru, otomatis didaftarkan ke sistem</p>
+                    </div>
+
+                    <!-- Date -->
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Tanggal</label>
+                        <div class="relative">
+                            <i class="fas fa-calendar absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs z-10"></i>
+                            <input id="input-tx-date" type="date" class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-xs" required>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Catatan (Opsional)</label>
+                        <div class="relative">
+                            <i class="fas fa-pen absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs z-10"></i>
+                            <input id="input-tx-notes" type="text" placeholder="Keterangan transaksi..." class="w-full glass-input rounded-xl py-3 pl-10 pr-4 text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-6">
+                    <button id="btn-save-transaction" type="submit" class="w-full btn-gradient rounded-2xl py-4 font-semibold text-xs shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-95 active:scale-[0.98] transition text-white">
+                        Simpan Transaksi
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- FLOATING BOTTOM NAVIGATION                                           -->
+        <!-- ==================================================================== -->
+        <div id="bottom-nav" class="absolute bottom-0 left-0 right-0 h-[84px] glass flex justify-around items-center px-4 rounded-t-[30px] sm:rounded-b-[40px] border-b-0 border-x-0 border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.3)] bg-[#1a1b2f]/90 nav-bar translate-y-[150%]">
+            <button data-nav="home" id="nav-home" class="nav-btn active text-white relative w-12 h-12 flex flex-col items-center justify-center">
+                <i class="fas fa-home text-[20px]"></i>
+                <span class="text-[9px] mt-0.5 font-medium">Home</span>
+                <div class="indicator absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            </button>
+            <button data-nav="stats" id="nav-stats" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex flex-col items-center justify-center relative">
+                <i class="fas fa-chart-pie text-[20px]"></i>
+                <span class="text-[9px] mt-0.5 font-medium">Stats</span>
+                <div class="indicator hidden absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            </button>
+            <button data-nav="wallet" id="nav-wallet" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex flex-col items-center justify-center relative">
+                <i class="fas fa-wallet text-[20px]"></i>
+                <span class="text-[9px] mt-0.5 font-medium">Dompet</span>
+                <div class="indicator hidden absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            </button>
+            <button data-nav="settings" id="nav-settings" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex flex-col items-center justify-center relative">
+                <i class="fas fa-cog text-[20px]"></i>
+                <span class="text-[9px] mt-0.5 font-medium">Akun</span>
+                <div class="indicator hidden absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            </button>
+        </div>
+        
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- MODALS CONTAINER                                                     -->
+    <!-- ==================================================================== -->
+    <div id="modals-root">
+        <!-- Modals will be rendered here dynamically -->
+    </div>
+
+    <!-- Application Script -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
+
