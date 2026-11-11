@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- DOMPETKU - SUPABASE DATABASE SCHEMA & RLS POLICIES
--- Jalankan skrip ini di SQL Editor dashboard Supabase project Anda.
+-- Jalankan skrip ini di menu SQL Editor pada dashboard Supabase project Anda.
 -- ==============================================================================
 
 -- 1. Enable UUID extension
@@ -140,32 +140,45 @@ ALTER TABLE public.debt_payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.assets ENABLE ROW LEVEL SECURITY;
 
 -- Policy Profiles
+DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
 CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 CREATE POLICY "Users can update own profile" ON public.profiles FOR UPDATE USING (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
 CREATE POLICY "Users can insert own profile" ON public.profiles FOR INSERT WITH CHECK (auth.uid() = id);
 
 -- Policy Pockets
+DROP POLICY IF EXISTS "Users can CRUD own pockets" ON public.pockets;
 CREATE POLICY "Users can CRUD own pockets" ON public.pockets FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Categories
+DROP POLICY IF EXISTS "Users can CRUD own categories" ON public.categories;
 CREATE POLICY "Users can CRUD own categories" ON public.categories FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Transactions
+DROP POLICY IF EXISTS "Users can CRUD own transactions" ON public.transactions;
 CREATE POLICY "Users can CRUD own transactions" ON public.transactions FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Transaction Archives
+DROP POLICY IF EXISTS "Users can CRUD own transaction archives" ON public.transaction_archives;
 CREATE POLICY "Users can CRUD own transaction archives" ON public.transaction_archives FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Budgets
+DROP POLICY IF EXISTS "Users can CRUD own budgets" ON public.budgets;
 CREATE POLICY "Users can CRUD own budgets" ON public.budgets FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Debts
+DROP POLICY IF EXISTS "Users can CRUD own debts" ON public.debts;
 CREATE POLICY "Users can CRUD own debts" ON public.debts FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Debt Payments
+DROP POLICY IF EXISTS "Users can CRUD own debt payments" ON public.debt_payments;
 CREATE POLICY "Users can CRUD own debt payments" ON public.debt_payments FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- Policy Assets
+DROP POLICY IF EXISTS "Users can CRUD own assets" ON public.assets;
 CREATE POLICY "Users can CRUD own assets" ON public.assets FOR ALL USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
 
 -- ==============================================================================
@@ -184,11 +197,13 @@ BEGIN
     -- 1. Insert Profile
     INSERT INTO public.profiles (id, username, full_name)
     VALUES (NEW.id, raw_user_name, raw_full_name)
-    ON CONFLICT (id) DO NOTHING;
+    ON CONFLICT (id) DO UPDATE SET full_name = EXCLUDED.full_name;
 
-    -- 2. Insert Default Pocket: "Dompet Utama"
-    INSERT INTO public.pockets (user_id, name, initial_balance, icon, color, order_index)
-    VALUES (NEW.id, 'Dompet Utama', 0, 'fa-wallet', '#5b55f9', 0);
+    -- 2. Insert Default Pocket: "Dompet Utama" (jika belum ada)
+    IF NOT EXISTS (SELECT 1 FROM public.pockets WHERE user_id = NEW.id) THEN
+        INSERT INTO public.pockets (user_id, name, initial_balance, icon, color, order_index)
+        VALUES (NEW.id, 'Dompet Utama', 0, 'fa-wallet', '#5b55f9', 0);
+    END IF;
 
     -- 3. Insert Default Categories
     INSERT INTO public.categories (user_id, name, type, icon, color) VALUES
@@ -201,7 +216,8 @@ BEGIN
     (NEW.id, 'Gaji', 'income', 'fa-money-bill-wave', '#10b981'),
     (NEW.id, 'Bonus & Hadiah', 'income', 'fa-gift', '#6366f1'),
     (NEW.id, 'Investasi', 'income', 'fa-chart-line', '#06b6d4'),
-    (NEW.id, 'Lain-lain', 'income', 'fa-coins', '#84cc16');
+    (NEW.id, 'Lain-lain', 'income', 'fa-coins', '#84cc16')
+    ON CONFLICT (user_id, name, type) DO NOTHING;
 
     RETURN NEW;
 END;
@@ -223,7 +239,6 @@ RETURNS INTEGER AS $$
 DECLARE
     v_count INTEGER;
 BEGIN
-    -- Salin ke tabel arsip
     WITH moved_rows AS (
         DELETE FROM public.transactions
         WHERE user_id = auth.uid()
@@ -243,4 +258,3 @@ BEGIN
     RETURN v_count;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-
