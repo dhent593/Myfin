@@ -1514,25 +1514,30 @@ function bindAppEvents() {
   });
 
   // Auth Form Submit
-  document.getElementById('form-auth')?.addEventListener('submit', async () => {
-    const username = document.getElementById('input-username')?.value.trim();
+  document.getElementById('form-auth')?.addEventListener('submit', async (e) => {
+    e?.preventDefault?.();
+    const userInput = document.getElementById('input-username')?.value.trim();
     const password = document.getElementById('input-password')?.value;
-    const fullName = document.getElementById('input-fullname')?.value.trim() || username;
+    const fullName = document.getElementById('input-fullname')?.value.trim() || userInput;
 
-    if (!username || !password) return;
+    if (!userInput || !password) return;
 
     if (isRegisterMode && password.length < 6) {
       showToast('Password minimal 6 karakter', 'error');
       return;
     }
 
-    const internalEmail = `${username.toLowerCase()}@dompetku.local`;
+    const cleanInput = userInput.toLowerCase();
+    // Jika input mengandung '@', berarti user memasukkan email lengkap (e.g. arif.setiawan2209@gmail.com)
+    // Jika tidak mengandung '@', gunakan format internal username@dompetku.local
+    const emailToUse = cleanInput.includes('@') ? cleanInput : `${cleanInput}@dompetku.local`;
+    const usernameForProfile = cleanInput.includes('@') ? cleanInput.split('@')[0] : cleanInput;
 
     if (!isSupabaseConfigured()) {
       // Offline fallback login
       state.currentUser = {
         id: crypto.randomUUID(),
-        username: username,
+        username: usernameForProfile,
         full_name: fullName,
       };
       localStorage.setItem('dompetku_user', JSON.stringify(state.currentUser));
@@ -1545,17 +1550,28 @@ function bindAppEvents() {
     try {
       if (isRegisterMode) {
         const { data, error } = await supabase.auth.signUp({
-          email: internalEmail,
+          email: emailToUse,
           password: password,
           options: {
-            data: { username, full_name: fullName }
+            data: { username: usernameForProfile, full_name: fullName }
           }
         });
         if (error) throw error;
 
+        // Jika email confirmation aktif di Supabase dan session belum langsung terbentuk
+        if (!data.session && data.user) {
+          if (data.user.identities && data.user.identities.length === 0) {
+            showToast('Email / Username ini sudah terdaftar. Silakan login.', 'error');
+            return;
+          }
+          showToast('Pendaftaran berhasil! Silakan masuk ke akun Anda.', 'success');
+          tabLogin?.click();
+          return;
+        }
+
         state.currentUser = {
           id: data.user.id,
-          username: username,
+          username: usernameForProfile,
           full_name: fullName,
         };
         localStorage.setItem('dompetku_user', JSON.stringify(state.currentUser));
@@ -1564,22 +1580,42 @@ function bindAppEvents() {
         navigate('home');
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
-          email: internalEmail,
+          email: emailToUse,
           password: password,
         });
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes('Invalid login credentials') && !cleanInput.includes('@')) {
+            throw new Error('Kredensial salah. Jika Anda mendaftar dengan alamat email, silakan ketik email lengkap Anda.');
+          }
+          throw error;
+        }
 
-        // Fetch user profile
-        const { data: profile } = await supabase
+        // Fetch user profile (or auto-create if missing)
+        let { data: profile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
-          .single();
+          .maybeSingle();
+
+        if (!profile) {
+          const autoUsername = data.user.user_metadata?.username || usernameForProfile;
+          const autoFullName = data.user.user_metadata?.full_name || autoUsername;
+          const { data: newProfile } = await supabase
+            .from('profiles')
+            .upsert({
+              id: data.user.id,
+              username: autoUsername,
+              full_name: autoFullName,
+            })
+            .select()
+            .maybeSingle();
+          profile = newProfile;
+        }
 
         state.currentUser = {
           id: data.user.id,
-          username: profile?.username || username,
-          full_name: profile?.full_name || username,
+          username: profile?.username || usernameForProfile,
+          full_name: profile?.full_name || usernameForProfile,
         };
         localStorage.setItem('dompetku_user', JSON.stringify(state.currentUser));
         await loadUserData();

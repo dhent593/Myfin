@@ -155,7 +155,21 @@ export async function loadUserData() {
       .order('order_index', { ascending: true });
 
     if (!pocketsErr && pocketsData) {
-      state.pockets = pocketsData;
+      if (pocketsData.length === 0) {
+        // Buat kantong default jika belum ada
+        const defaultPocket = {
+          user_id: userId,
+          name: 'Dompet Utama',
+          initial_balance: 0,
+          icon: 'fa-wallet',
+          color: '#5b55f9',
+          order_index: 0,
+        };
+        const { data: newP } = await supabase.from('pockets').insert(defaultPocket).select();
+        state.pockets = newP || [defaultPocket];
+      } else {
+        state.pockets = pocketsData;
+      }
     }
 
     // 2. Load Categories
@@ -164,7 +178,22 @@ export async function loadUserData() {
       .select('*')
       .eq('user_id', userId)
       .order('name');
-    if (catData) state.categories = catData;
+    if (catData) {
+      if (catData.length === 0) {
+        const initialCategories = [
+          { user_id: userId, name: 'Makanan & Minuman', type: 'expense', icon: 'fa-utensils', color: '#ef4444' },
+          { user_id: userId, name: 'Belanja', type: 'expense', icon: 'fa-shopping-bag', color: '#ec4899' },
+          { user_id: userId, name: 'Tagihan & Utilitas', type: 'expense', icon: 'fa-file-invoice-dollar', color: '#f59e0b' },
+          { user_id: userId, name: 'Transportasi', type: 'expense', icon: 'fa-car', color: '#3b82f6' },
+          { user_id: userId, name: 'Gaji', type: 'income', icon: 'fa-money-bill-wave', color: '#10b981' },
+          { user_id: userId, name: 'Investasi', type: 'income', icon: 'fa-chart-line', color: '#06b6d4' },
+        ];
+        const { data: newCats } = await supabase.from('categories').insert(initialCategories).select();
+        state.categories = newCats || initialCategories;
+      } else {
+        state.categories = catData;
+      }
+    }
 
     // 3. Load Active Transactions (Tahun Berjalan)
     const currentYear = new Date().getFullYear();
