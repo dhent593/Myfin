@@ -1,6 +1,6 @@
 {
-  "name": "Dompetku - Keuangan & Aset",
-  "short_name": "Dompetku",
+  "name": "MyFin - Keuangan & Aset",
+  "short_name": "MyFin",
   "description": "Aplikasi Pencatatan Keuangan, Anggaran, Hutang Piutang & Manajemen Aset Pribadi",
   "start_url": "/",
   "display": "standalone",
