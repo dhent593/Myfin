@@ -32,24 +32,28 @@
         <!-- PAGE 1: ONBOARDING                                                   -->
         <!-- ==================================================================== -->
         <div id="page-onboarding" class="page-container page-active hide-scroll pb-6">
-            <div class="relative h-[55%] w-full flex items-center justify-center overflow-hidden">
-                <div class="shape-blob w-40 h-40 bg-purple-600/40 top-10 left-[-20px]"></div>
-                <div class="shape-blob w-32 h-32 bg-blue-500/30 bottom-10 right-10"></div>
-                <div class="relative z-10 card-gradient w-64 h-40 rounded-2xl transform rotate-[-15deg] shadow-2xl border border-white/20 p-5 flex flex-col justify-between">
-                    <div class="flex justify-between items-center opacity-80 text-xs text-white">
-                        <span>. . . . 3245</span>
+            <div id="onboarding-hero" class="relative h-[55%] w-full flex items-center justify-center overflow-hidden [perspective:1000px]">
+                <div class="shape-blob shape-blob-1 w-44 h-44 bg-purple-600/35 top-8 left-[-20px]"></div>
+                <div class="shape-blob shape-blob-2 w-36 h-36 bg-blue-500/30 bottom-8 right-8"></div>
+                <div id="onboarding-card" class="relative z-10 card-gradient w-64 h-40 rounded-2xl shadow-2xl border border-white/20 p-5 flex flex-col justify-between overflow-hidden cursor-pointer select-none card-floating">
+                    <!-- Shimmer light reflection effect -->
+                    <div class="card-shine-bar"></div>
+                    <div class="flex justify-between items-center opacity-85 text-xs text-white relative z-10">
+                        <span class="tracking-widest font-mono text-[13px]">. . . . 3245</span>
+                        <i class="fas fa-wifi text-xs opacity-70"></i>
                     </div>
-                    <div class="text-white">
-                        <p class="text-[10px] opacity-70 mb-0.5">Balance</p>
-                        <h2 id="onboarding-balance" class="text-xl font-bold">Rp 8.482.000</h2>
+                    <div class="text-white relative z-10">
+                        <p class="text-[10px] uppercase tracking-wider opacity-70 mb-0.5 font-medium">Balance</p>
+                        <h2 id="onboarding-balance" class="text-xl font-bold tracking-tight">Rp 8.482.000</h2>
                     </div>
                 </div>
             </div>
             <div class="px-6 h-[45%] flex flex-col justify-end pb-10 relative z-10">
                 <h1 class="text-[28px] font-bold leading-tight mb-3">Sustainable solution<br>for the future</h1>
                 <p class="text-gray-400 text-sm mb-10 leading-relaxed">Catat transaksi, atur anggaran, dan pantau seluruh aset finansial dengan aman dan mudah</p>
-                <button id="btn-get-started" class="w-full btn-gradient rounded-2xl py-4 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-90 transition text-white">
-                    Get started
+                <button id="btn-get-started" class="w-full btn-gradient btn-gel rounded-2xl py-4 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] text-white flex items-center justify-center gap-2 group">
+                    <span>Get started</span>
+                    <i class="fas fa-arrow-right text-xs transition-transform duration-300 group-hover:translate-x-1.5"></i>
                 </button>
             </div>
         </div>

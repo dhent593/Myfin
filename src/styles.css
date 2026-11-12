@@ -300,4 +300,158 @@ body.light-mode .custom-checkbox:hover {
     background: rgba(91, 85, 249, 0.08);
 }
 
+/* ============================================================================== */
+/* ONBOARDING HERO CARD ANIMATION (3D Levitation, Dynamic Light Shimmer)          */
+/* ============================================================================== */
+
+.card-floating {
+    transform-style: preserve-3d;
+    transform: rotate(-15deg);
+    animation: cardFloatLevitate 4.5s ease-in-out infinite;
+    will-change: transform, box-shadow;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+    box-shadow: 0 20px 40px -10px rgba(91, 85, 249, 0.45), 0 0 25px rgba(144, 56, 244, 0.25);
+}
+
+@keyframes cardFloatLevitate {
+    0%, 100% {
+        transform: rotate(-15deg) translateY(0px) rotateX(0deg) rotateY(0deg);
+        box-shadow: 0 20px 40px -10px rgba(91, 85, 249, 0.45), 0 0 25px rgba(144, 56, 244, 0.25);
+    }
+    30% {
+        transform: rotate(-12.5deg) translateY(-14px) rotateX(4deg) rotateY(-5deg);
+        box-shadow: 0 34px 55px -8px rgba(91, 85, 249, 0.6), 0 0 35px rgba(144, 56, 244, 0.38);
+    }
+    65% {
+        transform: rotate(-17deg) translateY(-6px) rotateX(-3deg) rotateY(4deg);
+        box-shadow: 0 26px 45px -10px rgba(91, 85, 249, 0.5), 0 0 30px rgba(144, 56, 244, 0.3);
+    }
+}
+
+/* Diagonal Glossy Shimmer Beam */
+.card-shine-bar {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.08) 44%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0.08) 56%,
+        transparent 65%
+    );
+    transform: rotate(25deg);
+    animation: cardShineSweep 5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 5;
+}
+
+@keyframes cardShineSweep {
+    0%, 25% {
+        transform: translate(-100%, -100%) rotate(25deg);
+        opacity: 0;
+    }
+    32% {
+        opacity: 1;
+    }
+    55%, 100% {
+        transform: translate(100%, 100%) rotate(25deg);
+        opacity: 0;
+    }
+}
+
+/* Ambient Blobs Breathing */
+.shape-blob-1 {
+    animation: blobFloat1 7s ease-in-out infinite alternate;
+}
+.shape-blob-2 {
+    animation: blobFloat2 8s ease-in-out infinite alternate;
+}
+@keyframes blobFloat1 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(14px, 12px) scale(1.12); }
+}
+@keyframes blobFloat2 {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(-12px, -14px) scale(1.15); }
+}
+
+/* ============================================================================== */
+/* GEL / JELLY BUTTON (Tactile, bouncy, and smooth)                                */
+/* ============================================================================== */
+
+.btn-gel {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.3s ease, 
+                filter 0.3s ease;
+    will-change: transform, box-shadow;
+    box-shadow: 0 10px 25px -4px rgba(91, 85, 249, 0.4), 0 0 15px rgba(144, 56, 244, 0.2);
+}
+
+/* Glossy highlight sweep on hover */
+.btn-gel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 80%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.32),
+        transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.btn-gel:hover {
+    transform: translateY(-2.5px) scale(1.02);
+    box-shadow: 0 16px 35px -4px rgba(91, 85, 249, 0.55), 0 0 25px rgba(144, 56, 244, 0.4);
+    filter: brightness(1.08);
+}
+
+.btn-gel:hover::before {
+    left: 140%;
+}
+
+/* Gel Squish / Jelly Spring on Active */
+.btn-gel:active,
+.btn-gel.gel-active {
+    animation: gelBouncy 0.55s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    box-shadow: 0 4px 15px -2px rgba(91, 85, 249, 0.4);
+}
+
+@keyframes gelBouncy {
+    0% {
+        transform: scale(1, 1);
+    }
+    20% {
+        transform: scale(0.92, 0.85) translateY(3px);
+    }
+    45% {
+        transform: scale(1.05, 1.07) translateY(-2px);
+    }
+    70% {
+        transform: scale(0.98, 0.98) translateY(1px);
+    }
+    85% {
+        transform: scale(1.01, 1.02) translateY(0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+
 
