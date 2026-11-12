@@ -105,16 +105,12 @@ export function navigate(target) {
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.classList.remove('active', 'text-white');
       btn.classList.add('text-gray-500');
-      const ind = btn.querySelector('.indicator');
-      if (ind) ind.classList.add('hidden');
     });
 
     const activeBtn = document.getElementById('nav-' + target);
     if (activeBtn) {
       activeBtn.classList.remove('text-gray-500');
       activeBtn.classList.add('active', 'text-white');
-      const ind = activeBtn.querySelector('.indicator');
-      if (ind) ind.classList.remove('hidden');
     }
   }
 
@@ -203,27 +199,27 @@ function renderHomePage() {
         const solidColor = pocket.color || '#5b55f9';
 
         return `
-          <div class="w-[145px] min-w-[145px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/20 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
+          <div class="w-[125px] min-w-[125px] shrink-0 snap-start rounded-[18px] p-3 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/20 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
-              <p class="text-xs font-semibold text-white/95 truncate mb-1">${pocket.name}</p>
-              <h4 class="text-base font-extrabold text-white tracking-tight leading-snug mb-2 truncate">${formatRupiah(balance)}</h4>
+              <p class="text-[11px] font-semibold text-white/95 truncate mb-0.5">${pocket.name}</p>
+              <h4 class="text-sm font-extrabold text-white tracking-tight leading-snug mb-1.5 truncate">${formatRupiah(balance)}</h4>
             </div>
 
-            <div class="pt-0.5">
+            <div class="pt-1">
               ${hasTarget ? `
-                <div class="flex justify-between items-center text-[10px] text-white/90 font-medium mb-1">
+                <div class="flex justify-between items-center text-[9px] text-white/90 font-medium mb-1">
                   <span>Target: ${targetPercent}%</span>
                   <span class="truncate ml-1 text-white/80">${formatCompact(pocket.target_balance)}</span>
                 </div>
-                <div class="w-full bg-black/25 h-1.5 rounded-full overflow-hidden">
+                <div class="w-full bg-black/25 h-1 rounded-full overflow-hidden">
                   <div class="h-full bg-white rounded-full transition-all duration-500" style="width: ${targetPercent}%"></div>
                 </div>
               ` : `
-                <div class="flex justify-between items-center text-[10px] text-white/85 font-medium mb-1">
+                <div class="flex justify-between items-center text-[9px] text-white/85 font-medium mb-1">
                   <span>Kantong Aktif</span>
-                  <i class="fas fa-chevron-right text-[8px] opacity-70"></i>
+                  <i class="fas fa-chevron-right text-[7px] opacity-70"></i>
                 </div>
-                <div class="w-full bg-black/20 h-1.5 rounded-full"></div>
+                <div class="w-full bg-black/20 h-1 rounded-full"></div>
               `}
             </div>
           </div>
@@ -231,11 +227,11 @@ function renderHomePage() {
       }).join('');
 
       const addCardHtml = `
-        <div class="w-[110px] min-w-[110px] shrink-0 snap-start glass rounded-[20px] p-3 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
-          <div class="w-8 h-8 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1.5 shadow-sm">
-            <i class="fas fa-plus text-xs"></i>
+        <div class="w-[96px] min-w-[96px] shrink-0 snap-start glass rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+          <div class="w-7 h-7 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1 shadow-sm">
+            <i class="fas fa-plus text-[10px]"></i>
           </div>
-          <span class="text-[11px] font-semibold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
+          <span class="text-[10px] font-semibold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
         </div>
       `;
 

@@ -560,28 +560,24 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- FLOATING ROUNDED GLASS BOTTOM NAVIGATION                             -->
+        <!-- DOCKED BOTTOM NAVIGATION (Matching index-refference.html)             -->
         <!-- ==================================================================== -->
-        <div id="bottom-nav" class="nav-bar flex justify-around items-center px-3 translate-y-[150%]">
-            <button data-nav="home" id="nav-home" class="nav-btn active text-white relative w-11 h-11 flex items-center justify-center transition-all duration-300" title="Beranda">
-                <i class="fas fa-home text-lg"></i>
-                <div class="indicator absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+        <div id="bottom-nav" class="nav-bar flex justify-around items-center px-4 translate-y-[150%]">
+            <button data-nav="home" id="nav-home" class="nav-btn active text-white w-12 h-12 flex items-center justify-center transition" title="Beranda">
+                <i class="fas fa-home text-[22px]"></i>
             </button>
-            <button data-nav="stats" id="nav-stats" class="nav-btn text-gray-400 hover:text-white transition-all duration-300 w-11 h-11 flex items-center justify-center relative" title="Statistik & Anggaran">
-                <i class="fas fa-chart-pie text-lg"></i>
-                <div class="indicator hidden absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            <button data-nav="stats" id="nav-stats" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Statistik & Anggaran">
+                <i class="fas fa-chart-pie text-[22px]"></i>
             </button>
-            <!-- Center Floating Action Button: Tambah Transaksi -->
-            <button id="nav-btn-add" class="relative -mt-5 w-12 h-12 rounded-full btn-gradient shadow-[0_8px_20px_rgba(91,85,249,0.55)] flex items-center justify-center text-white text-lg hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-[#1a1b2f]" title="Tambah Transaksi">
-                <i class="fas fa-plus"></i>
+            <!-- Center Action Button: Tambah Transaksi (Solid purple, no gradient) -->
+            <button id="nav-btn-add" class="w-11 h-11 rounded-full bg-[#5b55f9] hover:bg-[#6c67fa] active:scale-95 text-white flex items-center justify-center transition shadow-md" title="Tambah Transaksi">
+                <i class="fas fa-plus text-base"></i>
             </button>
-            <button data-nav="wallet" id="nav-wallet" class="nav-btn text-gray-400 hover:text-white transition-all duration-300 w-11 h-11 flex items-center justify-center relative" title="Kantong & Aset">
-                <i class="fas fa-wallet text-lg"></i>
-                <div class="indicator hidden absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            <button data-nav="wallet" id="nav-wallet" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Kantong & Aset">
+                <i class="fas fa-wallet text-[22px]"></i>
             </button>
-            <button data-nav="settings" id="nav-settings" class="nav-btn text-gray-400 hover:text-white transition-all duration-300 w-11 h-11 flex items-center justify-center relative" title="Pengaturan">
-                <i class="fas fa-cog text-lg"></i>
-                <div class="indicator hidden absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full transition-all"></div>
+            <button data-nav="settings" id="nav-settings" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Pengaturan">
+                <i class="fas fa-cog text-[22px]"></i>
             </button>
         </div>
         
