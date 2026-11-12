@@ -71,7 +71,9 @@ export function navigate(target) {
 
     if (page === target) {
       if (page === 'home') {
-        el.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[85px]';
+        el.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[96px]';
+      } else if (page === 'onboarding') {
+        el.className = 'page-container page-active hide-scroll relative overflow-hidden flex flex-col justify-between';
       } else {
         el.className = 'page-container page-active hide-scroll ' + (navPages.includes(page) ? 'pb-[100px]' : '');
       }
@@ -199,27 +201,27 @@ function renderHomePage() {
         const solidColor = pocket.color || '#5b55f9';
 
         return `
-          <div class="w-[125px] min-w-[125px] shrink-0 snap-start rounded-[18px] p-3 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/20 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
+          <div class="w-[136px] min-w-[136px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/20 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
-              <p class="text-[11px] font-semibold text-white/95 truncate mb-0.5">${pocket.name}</p>
-              <h4 class="text-sm font-extrabold text-white tracking-tight leading-snug mb-1.5 truncate">${formatRupiah(balance)}</h4>
+              <p class="text-xs font-bold text-white/95 truncate mb-1">${pocket.name}</p>
+              <h4 class="text-[15px] font-black text-white tracking-tight leading-snug mb-2 truncate">${formatRupiah(balance)}</h4>
             </div>
 
             <div class="pt-1">
               ${hasTarget ? `
-                <div class="flex justify-between items-center text-[9px] text-white/90 font-medium mb-1">
+                <div class="flex justify-between items-center text-[10px] text-white/90 font-medium mb-1.5">
                   <span>Target: ${targetPercent}%</span>
                   <span class="truncate ml-1 text-white/80">${formatCompact(pocket.target_balance)}</span>
                 </div>
-                <div class="w-full bg-black/25 h-1 rounded-full overflow-hidden">
+                <div class="w-full bg-black/25 h-1.5 rounded-full overflow-hidden">
                   <div class="h-full bg-white rounded-full transition-all duration-500" style="width: ${targetPercent}%"></div>
                 </div>
               ` : `
-                <div class="flex justify-between items-center text-[9px] text-white/85 font-medium mb-1">
+                <div class="flex justify-between items-center text-[10px] text-white/85 font-medium mb-1.5">
                   <span>Kantong Aktif</span>
-                  <i class="fas fa-chevron-right text-[7px] opacity-70"></i>
+                  <i class="fas fa-chevron-right text-[8px] opacity-75"></i>
                 </div>
-                <div class="w-full bg-black/20 h-1 rounded-full"></div>
+                <div class="w-full bg-black/20 h-1.5 rounded-full"></div>
               `}
             </div>
           </div>
@@ -227,11 +229,11 @@ function renderHomePage() {
       }).join('');
 
       const addCardHtml = `
-        <div class="w-[96px] min-w-[96px] shrink-0 snap-start glass rounded-[18px] p-2.5 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
-          <div class="w-7 h-7 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1 shadow-sm">
-            <i class="fas fa-plus text-[10px]"></i>
+        <div class="w-[102px] min-w-[102px] shrink-0 snap-start glass rounded-[20px] p-3 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+          <div class="w-8 h-8 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1.5 shadow-sm">
+            <i class="fas fa-plus text-xs"></i>
           </div>
-          <span class="text-[10px] font-semibold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
+          <span class="text-[11px] font-bold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
         </div>
       `;
 
@@ -258,17 +260,17 @@ function renderHomePage() {
         const iconClass = isExp ? 'fa-arrow-up text-red-400' : (isInc ? 'fa-arrow-down text-green-400' : 'fa-paper-plane text-purple-400');
 
         return `
-          <div class="glass p-3.5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center">
-                <i class="fas ${iconClass} text-xs"></i>
+          <div class="glass p-3.5 sm:p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
+                <i class="fas ${iconClass} text-sm"></i>
               </div>
               <div>
-                <p class="font-semibold text-xs text-white">${tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi')}</p>
-                <p class="text-[10px] text-gray-400">${formatDate(tx.date)} ${tx.notes ? '• ' + tx.notes : ''}</p>
+                <p class="font-bold text-sm text-white leading-tight">${tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi')}</p>
+                <p class="text-xs text-gray-400 mt-0.5">${formatDate(tx.date)} ${tx.notes ? '• ' + tx.notes : ''}</p>
               </div>
             </div>
-            <span class="font-bold text-xs ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
+            <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
           </div>
         `;
       }).join('');
@@ -665,17 +667,17 @@ function renderTransactionsPage() {
       const icon = isExp ? 'fa-shopping-bag' : (isInc ? 'fa-arrow-down text-green-400' : 'fa-paper-plane text-purple-400');
 
       return `
-        <div class="glass p-3.5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center">
-              <i class="fas ${icon} text-xs text-gray-300"></i>
+        <div class="glass p-3.5 sm:p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
+          <div class="flex items-center gap-3.5">
+            <div class="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
+              <i class="fas ${icon} text-sm text-gray-300"></i>
             </div>
             <div>
-              <p class="font-semibold text-xs text-white">${tx.category_name || (tx.type === 'transfer' ? 'Pindah Dana' : 'Transaksi')}</p>
-              <p class="text-[10px] text-gray-400">${tx.notes || formatDate(tx.date)}</p>
+              <p class="font-bold text-sm text-white leading-tight">${tx.category_name || (tx.type === 'transfer' ? 'Pindah Dana' : 'Transaksi')}</p>
+              <p class="text-xs text-gray-400 mt-0.5">${tx.notes || formatDate(tx.date)}</p>
             </div>
           </div>
-          <span class="font-bold text-xs ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
+          <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
         </div>
       `;
     }).join('');

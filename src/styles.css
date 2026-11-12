@@ -16,11 +16,12 @@ html, body {
     overflow: hidden;
     overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
+    background-color: #1a1b2f;
 }
 
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif; 
-    background-color: #0b0c16; 
+    background-color: #1a1b2f; 
     color: white; 
     transition: background-color 0.4s, color 0.4s;
     user-select: none;
@@ -157,35 +158,48 @@ body.light-mode input:-webkit-autofill:active {
     z-index: 1; 
 }
 
-/* Bottom Nav Bar (Exact Match with index-refference.html, with center + button) */
+/* Bottom Nav Bar (Docked Native FinTech Navigation) */
 .nav-bar { 
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 76px;
+    width: 100%;
+    min-height: 74px;
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
+    padding-top: 8px;
     border-radius: 28px 28px 0 0;
-    background: rgba(26, 27, 47, 0.96) !important;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: #1a1b2f !important;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
     border: none !important;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; 
-    z-index: 30; 
+    z-index: 40; 
+    box-sizing: border-box;
 }
 @media (min-width: 768px) {
     .nav-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 76px;
+        min-height: 76px;
+        padding-bottom: 0;
+        padding-top: 0;
         border-radius: 28px 28px 40px 40px;
     }
 }
 
 #nav-btn-add {
     background-color: #5b55f9 !important;
-    box-shadow: 0 4px 14px rgba(91, 85, 249, 0.4);
+    box-shadow: 0 4px 16px rgba(91, 85, 249, 0.45);
 }
 #nav-btn-add:hover {
     background-color: #6c67fa !important;
-    box-shadow: 0 6px 18px rgba(91, 85, 249, 0.55);
+    box-shadow: 0 6px 20px rgba(91, 85, 249, 0.6);
 }
 
 /* Home Page: Fixed Top Area & Scrollable Transactions Only */

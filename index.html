@@ -6,9 +6,9 @@
     <title>MyFin - Keuangan & Manajemen Aset</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#0b0c16">
+    <meta name="theme-color" content="#1a1b2f">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#1a1b2f">
     <meta name="apple-mobile-web-app-title" content="MyFin">
     <link rel="manifest" href="/manifest.webmanifest">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=3">
@@ -32,17 +32,27 @@
         <!-- ==================================================================== -->
         <!-- PAGE 1: ONBOARDING                                                   -->
         <!-- ==================================================================== -->
-        <div id="page-onboarding" class="page-container page-active hide-scroll pb-6 relative overflow-hidden">
+        <div id="page-onboarding" class="page-container page-active hide-scroll relative overflow-hidden flex flex-col justify-between">
             <!-- Fullscreen Seamless Ambient Glow (No boundary line) -->
             <div id="onboarding-hero">
                 <div class="blob-animated-purple w-80 h-80 bg-purple-600/35"></div>
                 <div class="blob-animated-blue w-72 h-72 bg-blue-600/30"></div>
                 <div class="blob-animated-accent w-60 h-60 bg-fuchsia-600/20"></div>
             </div>
-            <div class="relative z-10 h-full flex flex-col justify-end px-6 pb-10">
-                <h1 class="text-[28px] font-bold leading-tight mb-3">Sustainable solution<br>for the future</h1>
-                <p class="text-gray-400 text-sm mb-10 leading-relaxed">Catat transaksi, atur anggaran, dan pantau seluruh aset finansial dengan aman dan mudah</p>
-                <button id="btn-get-started" class="w-full btn-gradient rounded-2xl py-4 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-90 active:scale-[0.98] transition text-white">
+            
+            <!-- Top Content: Judul & Deskripsi Singkat di Bagian Atas -->
+            <div class="relative z-10 px-7 pt-14 sm:pt-16">
+                <h1 class="text-[32px] sm:text-[36px] font-extrabold tracking-tight leading-[1.2] mb-3 text-white">
+                    Sustainable solution<br>for the future
+                </h1>
+                <p class="text-gray-300 text-sm leading-relaxed max-w-[320px]">
+                    Catat transaksi, atur anggaran, dan pantau seluruh aset finansial dengan aman dan mudah
+                </p>
+            </div>
+
+            <!-- Bottom Content: Tombol Dibuat Agak ke Atas dengan Padding Nyaman -->
+            <div class="relative z-10 px-7 pb-20 sm:pb-14">
+                <button id="btn-get-started" class="w-full btn-gradient rounded-2xl py-4 font-bold text-sm shadow-[0_10px_25px_rgba(91,85,249,0.35)] hover:opacity-95 active:scale-[0.98] transition text-white">
                     Get started
                 </button>
             </div>
@@ -121,17 +131,17 @@
         <!-- ==================================================================== -->
         <!-- PAGE 3: HOME / DASHBOARD                                             -->
         <!-- ==================================================================== -->
-        <div id="page-home" class="page-container page-hidden-right hide-scroll flex flex-col h-full overflow-hidden pb-[85px]">
+        <div id="page-home" class="page-container page-hidden-right hide-scroll flex flex-col h-full overflow-hidden pb-[96px]">
             <!-- Fixed Top Section (Non-scrolling) -->
             <div class="shrink-0">
                 <!-- Header Top -->
                 <div class="p-6 pb-2.5 flex justify-between items-center pt-8">
                     <div>
                         <p class="text-gray-400 text-xs mb-0.5">Selamat datang,</p>
-                        <h1 id="user-display-name" class="text-xl font-bold tracking-wide">Pengguna</h1>
+                        <h1 id="user-display-name" class="text-xl sm:text-2xl font-extrabold tracking-wide">Pengguna</h1>
                     </div>
-                    <button id="btn-home-profile" class="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 active:scale-95 transition" title="Profil">
-                        <i class="fas fa-user text-sm"></i>
+                    <button id="btn-home-profile" class="w-11 h-11 rounded-full glass flex items-center justify-center hover:bg-white/10 active:scale-95 transition" title="Profil">
+                        <i class="fas fa-user text-base"></i>
                     </button>
                 </div>
 
@@ -149,7 +159,7 @@
                             </div>
                             <p class="text-xs opacity-75 mb-0.5 font-medium">Net Worth Aktual</p>
                             <div class="flex justify-between items-end">
-                                <h2 id="total-net-worth" class="text-2xl font-extrabold tracking-tight">Rp 0</h2>
+                                <h2 id="total-net-worth" class="text-[28px] font-extrabold tracking-tight">Rp 0</h2>
                                 <span class="text-[10px] opacity-80 font-medium tracking-wide bg-white/10 px-2 py-0.5 rounded-lg">Real-time</span>
                             </div>
                         </div>
@@ -159,8 +169,8 @@
                 <!-- Primary Pocket Snapshot Slider -->
                 <div class="px-6 mb-3">
                     <div class="flex justify-between items-center mb-2.5">
-                        <h3 class="font-bold text-sm text-white">Kantong Dana</h3>
-                        <span id="link-view-all-pockets" class="text-xs text-gray-400 hover:text-white transition cursor-pointer">Kelola</span>
+                        <h3 class="font-bold text-base text-white">Kantong Dana</h3>
+                        <span id="link-view-all-pockets" class="text-xs text-purple-300 font-semibold hover:text-white transition cursor-pointer">Kelola</span>
                     </div>
                     <div id="home-pockets-list" class="flex gap-2.5 overflow-x-auto hide-scroll pb-1.5 pt-0.5 snap-x snap-mandatory touch-pan-x cursor-grab">
                         <!-- Populated dynamically -->
@@ -171,8 +181,8 @@
             <!-- Recent Transactions Section (Scrollable only here) -->
             <div class="flex-1 min-h-0 overflow-y-auto hide-scroll px-6 pb-4">
                 <div class="flex justify-between items-center mb-2.5 sticky top-0 app-bg pt-2 pb-1.5 z-10">
-                    <h3 class="font-bold text-sm">Transaksi Terkini</h3>
-                    <span id="link-see-all-tx" class="text-xs text-gray-400 hover:text-white transition cursor-pointer">Lihat Semua</span>
+                    <h3 class="font-bold text-base text-white">Transaksi Terkini</h3>
+                    <span id="link-see-all-tx" class="text-xs text-purple-300 font-semibold hover:text-white transition cursor-pointer">Lihat Semua</span>
                 </div>
                 <div id="home-recent-transactions" class="space-y-2.5">
                     <!-- Populated dynamically -->
@@ -560,24 +570,24 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- DOCKED BOTTOM NAVIGATION (Matching index-refference.html)             -->
+        <!-- DOCKED BOTTOM NAVIGATION (Native FinTech Proportions)                 -->
         <!-- ==================================================================== -->
-        <div id="bottom-nav" class="nav-bar flex justify-around items-center px-4 translate-y-[150%]">
+        <div id="bottom-nav" class="nav-bar flex justify-around items-center px-3 sm:px-4 translate-y-[150%]">
             <button data-nav="home" id="nav-home" class="nav-btn active text-white w-12 h-12 flex items-center justify-center transition" title="Beranda">
-                <i class="fas fa-home text-[22px]"></i>
+                <i class="fas fa-home text-[24px]"></i>
             </button>
             <button data-nav="stats" id="nav-stats" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Statistik & Anggaran">
-                <i class="fas fa-chart-pie text-[22px]"></i>
+                <i class="fas fa-chart-pie text-[24px]"></i>
             </button>
-            <!-- Center Action Button: Tambah Transaksi (Solid purple, no gradient) -->
-            <button id="nav-btn-add" class="w-11 h-11 rounded-full bg-[#5b55f9] hover:bg-[#6c67fa] active:scale-95 text-white flex items-center justify-center transition shadow-md" title="Tambah Transaksi">
-                <i class="fas fa-plus text-base"></i>
+            <!-- Center Action Button: Tambah Transaksi (Solid purple, Prominent Native Size) -->
+            <button id="nav-btn-add" class="w-[52px] h-[52px] min-w-[52px] rounded-full bg-[#5b55f9] hover:bg-[#6c67fa] active:scale-95 text-white flex items-center justify-center transition shadow-[0_6px_20px_rgba(91,85,249,0.5)] shrink-0" title="Tambah Transaksi">
+                <i class="fas fa-plus text-xl"></i>
             </button>
             <button data-nav="wallet" id="nav-wallet" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Kantong & Aset">
-                <i class="fas fa-wallet text-[22px]"></i>
+                <i class="fas fa-wallet text-[24px]"></i>
             </button>
             <button data-nav="settings" id="nav-settings" class="nav-btn text-gray-500 hover:text-white transition w-12 h-12 flex items-center justify-center" title="Pengaturan">
-                <i class="fas fa-cog text-[22px]"></i>
+                <i class="fas fa-cog text-[24px]"></i>
             </button>
         </div>
         
