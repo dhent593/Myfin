@@ -1441,14 +1441,8 @@ function openArchiveDataModal() {
 
 function bindAppEvents() {
   // Navigation Routing Buttons
-  const btnGetStarted = document.getElementById('btn-get-started');
-  btnGetStarted?.addEventListener('click', () => {
-    btnGetStarted.classList.remove('gel-active');
-    void btnGetStarted.offsetWidth; // trigger reflow for animation restart
-    btnGetStarted.classList.add('gel-active');
-    setTimeout(() => {
-      navigate('signin');
-    }, 280);
+  document.getElementById('btn-get-started')?.addEventListener('click', () => {
+    navigate('signin');
   });
 
   document.getElementById('link-see-all-tx')?.addEventListener('click', () => navigate('transactions'));
