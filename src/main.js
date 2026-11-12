@@ -1480,21 +1480,37 @@ function bindAppEvents() {
   const tabReg = document.getElementById('tab-auth-register');
   const fieldFullName = document.getElementById('field-fullname');
   const btnSubmitAuth = document.getElementById('btn-submit-auth');
+  const btnSwitchAuth = document.getElementById('btn-switch-auth');
+  const textAuthSwitchPrompt = document.getElementById('text-auth-switch-prompt');
 
-  tabLogin?.addEventListener('click', () => {
+  const setLoginMode = () => {
     isRegisterMode = false;
-    tabLogin.className = 'flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white';
-    tabReg.className = 'flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
+    if (tabLogin) tabLogin.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm';
+    if (tabReg) tabReg.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
     fieldFullName?.classList.add('hidden');
-    if (btnSubmitAuth) btnSubmitAuth.textContent = 'Masuk ke Akun';
-  });
+    if (btnSubmitAuth) btnSubmitAuth.textContent = 'Login';
+    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Belum punya akun?';
+    if (btnSwitchAuth) btnSwitchAuth.textContent = 'Sign Up';
+  };
 
-  tabReg?.addEventListener('click', () => {
+  const setRegisterMode = () => {
     isRegisterMode = true;
-    tabReg.className = 'flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white';
-    tabLogin.className = 'flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
+    if (tabReg) tabReg.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm';
+    if (tabLogin) tabLogin.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
     fieldFullName?.classList.remove('hidden');
-    if (btnSubmitAuth) btnSubmitAuth.textContent = 'Buat Akun Baru';
+    if (btnSubmitAuth) btnSubmitAuth.textContent = 'Sign Up';
+    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Sudah punya akun?';
+    if (btnSwitchAuth) btnSwitchAuth.textContent = 'Login';
+  };
+
+  tabLogin?.addEventListener('click', setLoginMode);
+  tabReg?.addEventListener('click', setRegisterMode);
+  btnSwitchAuth?.addEventListener('click', () => {
+    if (isRegisterMode) {
+      setLoginMode();
+    } else {
+      setRegisterMode();
+    }
   });
 
   // Password Visibility Toggle

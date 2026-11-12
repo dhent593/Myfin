@@ -52,24 +52,20 @@
         <!-- PAGE 2: SIGN IN & REGISTER (Tabbed - Slide Up from Bottom)            -->
         <!-- ==================================================================== -->
         <div id="page-signin" class="page-container page-hidden-bottom hide-scroll">
-            <div class="min-h-full flex flex-col justify-center px-6 py-10">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-11 h-11 rounded-2xl overflow-hidden shadow-lg shadow-purple-500/25 flex items-center justify-center bg-[#1a1738]/50 border border-white/10">
-                        <img src="/favicon.png?v=3" alt="MyFin Logo" class="w-full h-full object-contain p-1 rounded-2xl">
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold leading-tight">MyFin</h1>
-                        <p class="text-xs text-gray-400">Masuk untuk mengelola keuangan</p>
-                    </div>
+            <div class="min-h-full flex flex-col justify-start pt-14 px-6 pb-10">
+                <!-- Header (No Logo, MyFin bigger and higher up) -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-extrabold tracking-tight">MyFin</h1>
+                    <p class="text-xs text-gray-400 mt-1">Masuk untuk mengelola keuangan</p>
                 </div>
 
-                <!-- Tab Auth Switcher -->
+                <!-- Tab Auth Switcher (Clean, Non-Purple Glass) -->
                 <div class="flex gap-2 p-1.5 rounded-2xl glass mb-6">
-                    <button id="tab-auth-login" class="flex-1 py-2 text-xs font-semibold rounded-xl transition-all btn-gradient text-white">
-                        Masuk
+                    <button id="tab-auth-login" class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm">
+                        Login
                     </button>
-                    <button id="tab-auth-register" class="flex-1 py-2 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
-                        Daftar Baru
+                    <button id="tab-auth-register" class="flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
+                        Sign Up
                     </button>
                 </div>
                 
@@ -103,17 +99,22 @@
                         </div>
                     </div>
 
-                    <div id="auth-info" class="text-[11px] text-gray-400 flex items-center justify-between pt-1">
+                    <!-- Ingat saya (di sebelah kanan) -->
+                    <div id="auth-info" class="flex items-center justify-end pt-1">
                         <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input type="checkbox" id="auth-remember" checked class="custom-checkbox">
                             <span class="text-xs text-gray-300">Ingat saya</span>
+                            <input type="checkbox" id="auth-remember" checked class="custom-checkbox">
                         </label>
                     </div>
 
-                    <div class="pt-4">
+                    <div class="pt-4 space-y-3">
                         <button id="btn-submit-auth" type="submit" class="w-full btn-gradient rounded-xl py-3.5 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-95 active:scale-[0.98] transition text-white">
-                            Masuk ke Akun
+                            Login
                         </button>
+                        <p class="text-center text-xs text-gray-400 pt-1">
+                            <span id="text-auth-switch-prompt">Belum punya akun?</span>
+                            <button type="button" id="btn-switch-auth" class="text-white font-semibold underline hover:text-[#8b5cf6] ml-1 transition">Sign Up</button>
+                        </p>
                     </div>
                 </form>
             </div>
