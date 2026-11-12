@@ -300,69 +300,6 @@ body.light-mode .custom-checkbox:hover {
     background: rgba(91, 85, 249, 0.08);
 }
 
-/* ============================================================================== */
-/* ONBOARDING HERO CARD ANIMATION (3D Levitation, Dynamic Light Shimmer)          */
-/* ============================================================================== */
-
-.card-floating {
-    transform-style: preserve-3d;
-    transform: rotate(-15deg);
-    animation: cardFloatLevitate 4.5s ease-in-out infinite;
-    will-change: transform, box-shadow;
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
-    box-shadow: 0 20px 40px -10px rgba(91, 85, 249, 0.45), 0 0 25px rgba(144, 56, 244, 0.25);
-}
-
-@keyframes cardFloatLevitate {
-    0%, 100% {
-        transform: rotate(-15deg) translateY(0px) rotateX(0deg) rotateY(0deg);
-        box-shadow: 0 20px 40px -10px rgba(91, 85, 249, 0.45), 0 0 25px rgba(144, 56, 244, 0.25);
-    }
-    30% {
-        transform: rotate(-12.5deg) translateY(-14px) rotateX(4deg) rotateY(-5deg);
-        box-shadow: 0 34px 55px -8px rgba(91, 85, 249, 0.6), 0 0 35px rgba(144, 56, 244, 0.38);
-    }
-    65% {
-        transform: rotate(-17deg) translateY(-6px) rotateX(-3deg) rotateY(4deg);
-        box-shadow: 0 26px 45px -10px rgba(91, 85, 249, 0.5), 0 0 30px rgba(144, 56, 244, 0.3);
-    }
-}
-
-/* Diagonal Glossy Shimmer Beam */
-.card-shine-bar {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        115deg,
-        transparent 35%,
-        rgba(255, 255, 255, 0.08) 44%,
-        rgba(255, 255, 255, 0.35) 50%,
-        rgba(255, 255, 255, 0.08) 56%,
-        transparent 65%
-    );
-    transform: rotate(25deg);
-    animation: cardShineSweep 5s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 5;
-}
-
-@keyframes cardShineSweep {
-    0%, 25% {
-        transform: translate(-100%, -100%) rotate(25deg);
-        opacity: 0;
-    }
-    32% {
-        opacity: 1;
-    }
-    55%, 100% {
-        transform: translate(100%, 100%) rotate(25deg);
-        opacity: 0;
-    }
-}
-
 /* Ambient Blobs Breathing */
 .shape-blob-1 {
     animation: blobFloat1 7s ease-in-out infinite alternate;

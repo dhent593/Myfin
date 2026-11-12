@@ -1451,33 +1451,6 @@ function bindAppEvents() {
     }, 280);
   });
 
-  // Interactive 3D Parallax Tilt for Onboarding Card
-  const onboardingHero = document.getElementById('onboarding-hero');
-  const onboardingCard = document.getElementById('onboarding-card');
-  if (onboardingHero && onboardingCard) {
-    const handlePointerMove = (e) => {
-      const rect = onboardingHero.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      const x = clientX - rect.left - rect.width / 2;
-      const y = clientY - rect.top - rect.height / 2;
-      const rotateY = (x / (rect.width / 2)) * 14;
-      const rotateX = -(y / (rect.height / 2)) * 14;
-      onboardingCard.style.animationPlayState = 'paused';
-      onboardingCard.style.transform = `rotate(-15deg) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.04)`;
-    };
-
-    const handlePointerLeave = () => {
-      onboardingCard.style.transform = '';
-      onboardingCard.style.animationPlayState = 'running';
-    };
-
-    onboardingHero.addEventListener('mousemove', handlePointerMove);
-    onboardingHero.addEventListener('mouseleave', handlePointerLeave);
-    onboardingHero.addEventListener('touchmove', handlePointerMove, { passive: true });
-    onboardingHero.addEventListener('touchend', handlePointerLeave);
-  }
-
   document.getElementById('link-see-all-tx')?.addEventListener('click', () => navigate('transactions'));
   document.getElementById('link-view-all-pockets')?.addEventListener('click', () => navigate('wallet'));
   document.getElementById('btn-tx-back')?.addEventListener('click', () => navigate('home'));
