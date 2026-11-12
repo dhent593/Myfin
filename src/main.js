@@ -1477,9 +1477,8 @@ function bindAppEvents() {
   // Auth Modes (Sign In vs Sign Up)
   let isRegisterMode = false;
   const authTitle = document.getElementById('auth-title');
+  const authSubtitle = document.getElementById('auth-subtitle');
   const fieldFullName = document.getElementById('field-fullname');
-  const rowForgotUser = document.getElementById('row-forgot-user');
-  const linkForgotPin = document.getElementById('link-forgot-pin');
   const btnSubmitAuth = document.getElementById('btn-submit-auth');
   const btnSecondaryAuth = document.getElementById('btn-secondary-auth');
   const textAuthSwitchPrompt = document.getElementById('text-auth-switch-prompt');
@@ -1487,10 +1486,9 @@ function bindAppEvents() {
 
   const setLoginMode = () => {
     isRegisterMode = false;
-    if (authTitle) authTitle.textContent = 'Sign In';
+    if (authTitle) authTitle.textContent = 'MyFin';
+    if (authSubtitle) authSubtitle.textContent = 'Sign In jika sudah punya akun dan Sign Up jika belum punya akun';
     fieldFullName?.classList.add('hidden');
-    rowForgotUser?.classList.remove('hidden');
-    linkForgotPin?.classList.remove('invisible');
     if (btnSubmitAuth) btnSubmitAuth.textContent = 'Login';
     if (btnSecondaryAuth) btnSecondaryAuth.textContent = 'Need Help?';
     if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = "Don't Have Any Account?";
@@ -1499,10 +1497,9 @@ function bindAppEvents() {
 
   const setRegisterMode = () => {
     isRegisterMode = true;
-    if (authTitle) authTitle.textContent = 'Sign Up';
+    if (authTitle) authTitle.textContent = 'MyFin';
+    if (authSubtitle) authSubtitle.textContent = 'Daftar akun baru untuk mulai mengelola keuangan Anda';
     fieldFullName?.classList.remove('hidden');
-    rowForgotUser?.classList.add('hidden');
-    linkForgotPin?.classList.add('invisible');
     if (btnSubmitAuth) btnSubmitAuth.textContent = 'Sign Up';
     if (btnSecondaryAuth) btnSecondaryAuth.textContent = 'Sign In';
     if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Already Have An Account?';
@@ -1566,16 +1563,6 @@ function bindAppEvents() {
     } else {
       openAuthHelpModal();
     }
-  });
-
-  document.getElementById('link-forgot-user')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showToast('User ID Anda adalah email atau username yang terdaftar.', 'info');
-  });
-
-  document.getElementById('link-forgot-pin')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    showToast('Silakan gunakan opsi Reset Sandi atau hubungi administrator.', 'info');
   });
 
   // Password Visibility Toggle
