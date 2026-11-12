@@ -182,40 +182,77 @@ function renderHomePage() {
   const obEl = document.getElementById('onboarding-balance');
   if (obEl) obEl.textContent = formatRupiah(totalNetWorth);
 
-  // Pockets Snapshot
+  // Pockets Snapshot (Horizontal Scrollable Cards)
   const pocketsContainer = document.getElementById('home-pockets-list');
   if (pocketsContainer) {
     if (!state.pockets.length) {
       pocketsContainer.innerHTML = `
-        <div class="glass p-4 rounded-2xl text-center text-xs text-gray-400">
-          Belum ada kantong. Klik "+ Kantong Baru" untuk membuat.
+        <div class="w-full glass p-5 rounded-2xl text-center text-xs text-gray-400 border border-white/5">
+          Belum ada kantong. Klik "+ Kantong Baru" untuk membuat kantong pertama Anda.
         </div>
       `;
     } else {
-      pocketsContainer.innerHTML = state.pockets.slice(0, 3).map(pocket => {
+      const pocketCardsHtml = state.pockets.map((pocket, idx) => {
         const balance = calculatePocketBalance(pocket.id);
         const hasTarget = Boolean(pocket.target_balance && Number(pocket.target_balance) > 0);
-        const targetPercent = hasTarget ? Math.min(100, (balance / Number(pocket.target_balance)) * 100).toFixed(0) : null;
+        const targetPercent = hasTarget ? Math.min(100, Math.round((balance / Number(pocket.target_balance)) * 100)) : null;
 
         return `
-          <div class="glass p-3.5 rounded-2xl flex items-center justify-between hover:bg-white/10 transition cursor-pointer" onclick="window.dompetkuNavigate('wallet')">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background-color: ${pocket.color || '#5b55f9'}">
-                <i class="fas ${pocket.icon || 'fa-wallet'} text-sm"></i>
+          <div class="min-w-[190px] w-[205px] shrink-0 snap-start glass rounded-[22px] p-4 relative overflow-hidden border border-white/10 hover:border-white/20 transition-all cursor-pointer group active:scale-[0.98] shadow-md flex flex-col justify-between" onclick="window.dompetkuNavigate('wallet')">
+            <!-- Subtle Ambient Glow -->
+            <div class="absolute -right-6 -bottom-6 w-24 h-24 rounded-full blur-2xl opacity-25 pointer-events-none transition-opacity group-hover:opacity-40" style="background-color: ${pocket.color || '#5b55f9'}"></div>
+            
+            <div class="relative z-10">
+              <!-- Top Row: Icon & Status Badge -->
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md transition-transform group-hover:scale-105" style="background-color: ${pocket.color || '#5b55f9'}">
+                  <i class="fas ${pocket.icon || 'fa-wallet'} text-sm"></i>
+                </div>
+                ${hasTarget 
+                  ? `<span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-purple-300 border border-white/10 shadow-sm">${targetPercent}%</span>`
+                  : `<span class="text-[9px] font-medium px-2 py-0.5 rounded-full bg-white/5 text-gray-400 border border-white/5">${idx === 0 ? 'Utama' : 'Aktif'}</span>`
+                }
               </div>
-              <div>
-                <p class="font-semibold text-xs text-white">${pocket.name}</p>
-                <p class="text-[10px] text-gray-400">
-                  ${hasTarget ? `Target: ${formatCompact(pocket.target_balance)} (${targetPercent}%)` : 'Kantong Aktif'}
-                </p>
-              </div>
+              
+              <!-- Pocket Name -->
+              <h4 class="font-bold text-xs text-white truncate group-hover:text-purple-300 transition-colors">${pocket.name}</h4>
             </div>
-            <div class="text-right">
-              <p class="font-bold text-xs text-white">${formatRupiah(balance)}</p>
+
+            <!-- Bottom Row: Saldo & Target Bar -->
+            <div class="mt-3 pt-2.5 border-t border-white/5 relative z-10">
+              <p class="text-[10px] text-gray-400 font-medium mb-0.5">Saldo</p>
+              <p class="font-extrabold text-sm text-white tracking-tight">${formatRupiah(balance)}</p>
+              
+              ${hasTarget ? `
+                <div class="w-full bg-white/10 h-1.5 rounded-full mt-2 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-to-r from-[#5b55f9] to-[#9038f4] transition-all duration-500" style="width: ${targetPercent}%"></div>
+                </div>
+                <div class="flex justify-between items-center text-[9px] text-gray-400 mt-1">
+                  <span>Target: ${formatCompact(pocket.target_balance)}</span>
+                  <span>${targetPercent}%</span>
+                </div>
+              ` : `
+                <div class="flex justify-between items-center text-[9px] text-gray-500 mt-1.5">
+                  <span>Kantong Tersimpan</span>
+                  <i class="fas fa-chevron-right text-[8px] text-gray-500 group-hover:translate-x-0.5 transition-transform"></i>
+                </div>
+              `}
             </div>
           </div>
         `;
       }).join('');
+
+      const addCardHtml = `
+        <div class="min-w-[130px] shrink-0 snap-start glass rounded-[22px] p-4 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+          <div class="w-10 h-10 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-2 shadow-sm">
+            <i class="fas fa-plus text-xs"></i>
+          </div>
+          <span class="text-xs font-semibold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
+        </div>
+        <div class="w-1 shrink-0"></div>
+      `;
+
+      pocketsContainer.innerHTML = pocketCardsHtml + addCardHtml;
     }
   }
 
@@ -1848,10 +1885,48 @@ function bindAppEvents() {
     showToast('Berhasil keluar dari akun', 'info');
     navigate('onboarding');
   });
+
+  // Enable mouse drag-to-scroll on home pocket cards
+  const homePocketsSlider = document.getElementById('home-pockets-list');
+  if (homePocketsSlider) {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasMoved = false;
+
+    homePocketsSlider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      hasMoved = false;
+      startX = e.pageX - homePocketsSlider.offsetLeft;
+      scrollLeft = homePocketsSlider.scrollLeft;
+      homePocketsSlider.classList.add('cursor-grabbing');
+    });
+    window.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        homePocketsSlider.classList.remove('cursor-grabbing');
+      }
+    });
+    homePocketsSlider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - homePocketsSlider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      if (Math.abs(walk) > 4) hasMoved = true;
+      homePocketsSlider.scrollLeft = scrollLeft - walk;
+    });
+    homePocketsSlider.addEventListener('click', (e) => {
+      if (hasMoved) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  }
 }
 
-// Global window navigations for onclick attributes
+// Global window navigations & handlers for onclick attributes
 window.dompetkuNavigate = navigate;
+window.dompetkuOpenAddPocketModal = openAddPocketModal;
 
 // ==============================================================================
 // 7. APP INITIALIZATION & SERVICE WORKER
