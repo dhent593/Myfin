@@ -1474,43 +1474,108 @@ function bindAppEvents() {
   // Theme Toggle
   document.getElementById('btn-toggle-theme')?.addEventListener('click', toggleTheme);
 
-  // Auth Tabs (Login vs Register)
+  // Auth Modes (Sign In vs Sign Up)
   let isRegisterMode = false;
-  const tabLogin = document.getElementById('tab-auth-login');
-  const tabReg = document.getElementById('tab-auth-register');
+  const authTitle = document.getElementById('auth-title');
   const fieldFullName = document.getElementById('field-fullname');
+  const rowForgotUser = document.getElementById('row-forgot-user');
+  const linkForgotPin = document.getElementById('link-forgot-pin');
   const btnSubmitAuth = document.getElementById('btn-submit-auth');
-  const btnSwitchAuth = document.getElementById('btn-switch-auth');
+  const btnSecondaryAuth = document.getElementById('btn-secondary-auth');
   const textAuthSwitchPrompt = document.getElementById('text-auth-switch-prompt');
+  const linkSwitchAuth = document.getElementById('link-switch-auth');
 
   const setLoginMode = () => {
     isRegisterMode = false;
-    if (tabLogin) tabLogin.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm';
-    if (tabReg) tabReg.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
+    if (authTitle) authTitle.textContent = 'Sign In';
     fieldFullName?.classList.add('hidden');
+    rowForgotUser?.classList.remove('hidden');
+    linkForgotPin?.classList.remove('invisible');
     if (btnSubmitAuth) btnSubmitAuth.textContent = 'Login';
-    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Belum punya akun?';
-    if (btnSwitchAuth) btnSwitchAuth.textContent = 'Sign Up';
+    if (btnSecondaryAuth) btnSecondaryAuth.textContent = 'Need Help?';
+    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = "Don't Have Any Account?";
+    if (linkSwitchAuth) linkSwitchAuth.textContent = 'Sign Up';
   };
 
   const setRegisterMode = () => {
     isRegisterMode = true;
-    if (tabReg) tabReg.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm';
-    if (tabLogin) tabLogin.className = 'flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all';
+    if (authTitle) authTitle.textContent = 'Sign Up';
     fieldFullName?.classList.remove('hidden');
+    rowForgotUser?.classList.add('hidden');
+    linkForgotPin?.classList.add('invisible');
     if (btnSubmitAuth) btnSubmitAuth.textContent = 'Sign Up';
-    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Sudah punya akun?';
-    if (btnSwitchAuth) btnSwitchAuth.textContent = 'Login';
+    if (btnSecondaryAuth) btnSecondaryAuth.textContent = 'Sign In';
+    if (textAuthSwitchPrompt) textAuthSwitchPrompt.textContent = 'Already Have An Account?';
+    if (linkSwitchAuth) linkSwitchAuth.textContent = 'Sign In';
   };
 
-  tabLogin?.addEventListener('click', setLoginMode);
-  tabReg?.addEventListener('click', setRegisterMode);
-  btnSwitchAuth?.addEventListener('click', () => {
+  linkSwitchAuth?.addEventListener('click', (e) => {
+    e.preventDefault();
     if (isRegisterMode) {
       setLoginMode();
     } else {
       setRegisterMode();
     }
+  });
+
+  const openAuthHelpModal = () => {
+    openModal(`
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-base text-white">Bantuan Masuk & Akun</h3>
+        <button onclick="window.closeDompetkuModal()" class="w-8 h-8 rounded-full glass flex items-center justify-center text-xs text-gray-400 hover:text-white">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-3.5 text-xs text-gray-300">
+        <p class="leading-relaxed">
+          Gunakan ID Pelanggan atau Email yang terdaftar beserta PIN / Kata Sandi Anda untuk masuk ke MyFin.
+        </p>
+        <div class="p-3.5 rounded-xl glass border border-white/10 space-y-2">
+          <div class="font-semibold text-white flex items-center gap-2">
+            <i class="fas fa-magic text-[#8b5cf6]"></i> Masuk Mode Demo Cepat
+          </div>
+          <p class="text-gray-400 text-[11px] leading-relaxed">
+            Ingin mencoba semua fitur tanpa mendaftar akun? Masuk langsung dengan akun demo Smith.
+          </p>
+          <button id="btn-modal-demo-login" class="w-full btn-gradient py-2.5 rounded-xl font-semibold text-xs text-white shadow-md hover:opacity-90 active:scale-[0.98] transition">
+            Masuk sebagai Demo (Smith)
+          </button>
+        </div>
+      </div>
+    `);
+
+    setTimeout(() => {
+      document.getElementById('btn-modal-demo-login')?.addEventListener('click', () => {
+        closeModal();
+        state.currentUser = {
+          id: crypto.randomUUID(),
+          username: 'smith_demo',
+          full_name: 'Smith',
+        };
+        localStorage.setItem('dompetku_user', JSON.stringify(state.currentUser));
+        loadUserData();
+        showToast('Masuk dalam Akun Demo!', 'info');
+        navigate('home');
+      });
+    }, 50);
+  };
+
+  btnSecondaryAuth?.addEventListener('click', () => {
+    if (isRegisterMode) {
+      setLoginMode();
+    } else {
+      openAuthHelpModal();
+    }
+  });
+
+  document.getElementById('link-forgot-user')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast('User ID Anda adalah email atau username yang terdaftar.', 'info');
+  });
+
+  document.getElementById('link-forgot-pin')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast('Silakan gunakan opsi Reset Sandi atau hubungi administrator.', 'info');
   });
 
   // Password Visibility Toggle
@@ -1591,7 +1656,7 @@ function bindAppEvents() {
             return;
           }
           showToast('Pendaftaran berhasil! Silakan masuk ke akun Anda.', 'success');
-          tabLogin?.click();
+          setLoginMode();
           return;
         }
 

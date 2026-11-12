@@ -49,71 +49,66 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- PAGE 2: SIGN IN & REGISTER (Tabbed - Slide Up from Bottom)            -->
+        <!-- PAGE 2: SIGN IN & REGISTER (Slide Up from Bottom)                    -->
         <!-- ==================================================================== -->
         <div id="page-signin" class="page-container page-hidden-bottom hide-scroll">
-            <div class="min-h-full flex flex-col justify-start pt-14 px-6 pb-10">
-                <!-- Header (No Logo, MyFin bigger and higher up) -->
-                <div class="mb-8">
-                    <h1 class="text-3xl font-extrabold tracking-tight">MyFin</h1>
-                    <p class="text-xs text-gray-400 mt-1">Masuk untuk mengelola keuangan</p>
-                </div>
-
-                <!-- Tab Auth Switcher (Clean, Non-Purple Glass) -->
-                <div class="flex gap-2 p-1.5 rounded-2xl glass mb-6">
-                    <button id="tab-auth-login" class="flex-1 py-2.5 text-xs font-semibold rounded-xl transition-all bg-white/15 text-white border border-white/10 shadow-sm">
-                        Login
-                    </button>
-                    <button id="tab-auth-register" class="flex-1 py-2.5 text-xs font-semibold rounded-xl text-gray-400 hover:text-white transition-all">
-                        Sign Up
-                    </button>
-                </div>
+            <div class="min-h-[100%] flex flex-col justify-center px-6 py-12">
+                <h1 id="auth-title" class="text-2xl font-bold mb-10 text-white">Sign In</h1>
                 
                 <!-- Form Inputs -->
-                <form id="form-auth" class="space-y-4" onsubmit="return false;">
-                    <!-- Full Name (Only shown on register) -->
-                    <div id="field-fullname" class="hidden">
-                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Nama Lengkap</label>
-                        <div class="relative">
-                            <i class="fas fa-id-card absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
-                            <input id="input-fullname" type="text" placeholder="Budi Santoso" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm relative z-0">
+                <form id="form-auth" onsubmit="return false;">
+                    <div class="space-y-6">
+                        <!-- Full Name (Only shown on register) -->
+                        <div id="field-fullname" class="hidden">
+                            <div class="relative">
+                                <i class="fas fa-id-card absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                                <input id="input-fullname" type="text" placeholder="Full Name" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm transition relative z-0">
+                            </div>
+                        </div>
+
+                        <!-- Customer ID / Username / Email -->
+                        <div>
+                            <div class="relative">
+                                <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                                <input id="input-username" type="text" placeholder="Customer ID" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm transition relative z-0" required autocomplete="username">
+                            </div>
+                            <div id="row-forgot-user" class="flex justify-end mt-2">
+                                <a href="#" id="link-forgot-user" class="text-[11px] text-gray-400 hover:text-white transition">Forgot user ID ?</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Password / PIN -->
+                        <div>
+                            <div class="relative">
+                                <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
+                                <input id="input-password" type="password" placeholder="••••••••" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-10 text-sm tracking-widest transition relative z-0" required autocomplete="current-password">
+                                <i id="btn-toggle-password" class="fas fa-eye absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm cursor-pointer hover:text-white transition z-10"></i>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <a href="#" id="link-forgot-pin" class="text-[11px] text-gray-400 hover:text-white transition">Forgot PIN ?</a>
+                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                    <input type="checkbox" id="auth-remember" checked class="custom-checkbox">
+                                    <span class="text-[11px] text-gray-400">Remember me</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Username / Email -->
-                    <div>
-                        <label id="label-auth-username" class="text-[11px] text-gray-400 font-medium mb-1 block">Username atau Email</label>
-                        <div class="relative">
-                            <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
-                            <input id="input-username" type="text" placeholder="username atau email@anda.com" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-4 text-sm relative z-0" required autocomplete="username">
-                        </div>
-                    </div>
-                    
-                    <!-- Password -->
-                    <div>
-                        <label class="text-[11px] text-gray-400 font-medium mb-1 block">Password</label>
-                        <div class="relative">
-                            <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm z-10"></i>
-                            <input id="input-password" type="password" placeholder="Minimal 6 karakter" class="w-full glass-input rounded-xl py-3.5 pl-11 pr-11 text-sm tracking-wider relative z-0" required>
-                            <i id="btn-toggle-password" class="fas fa-eye absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm cursor-pointer hover:text-white transition z-10"></i>
-                        </div>
-                    </div>
-
-                    <!-- Ingat saya (di sebelah kanan) -->
-                    <div id="auth-info" class="flex items-center justify-end pt-1">
-                        <label class="flex items-center gap-2.5 cursor-pointer select-none">
-                            <span class="text-xs text-gray-300">Ingat saya</span>
-                            <input type="checkbox" id="auth-remember" checked class="custom-checkbox">
-                        </label>
-                    </div>
-
-                    <div class="pt-4 space-y-3">
-                        <button id="btn-submit-auth" type="submit" class="w-full btn-gradient rounded-xl py-3.5 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-95 active:scale-[0.98] transition text-white">
+                    <!-- Action Buttons Side-by-Side (Exact match to index-refference.html) -->
+                    <div class="mt-8 flex gap-4">
+                        <button id="btn-submit-auth" type="submit" class="flex-1 btn-gradient rounded-xl py-3.5 font-semibold text-sm shadow-[0_8px_20px_rgba(91,85,249,0.3)] hover:opacity-90 active:scale-[0.98] transition text-white">
                             Login
                         </button>
-                        <p class="text-center text-xs text-gray-400 pt-1">
-                            <span id="text-auth-switch-prompt">Belum punya akun?</span>
-                            <button type="button" id="btn-switch-auth" class="text-white font-semibold underline hover:text-[#8b5cf6] ml-1 transition">Sign Up</button>
+                        <button type="button" id="btn-secondary-auth" class="flex-1 glass rounded-xl py-3.5 font-semibold text-sm hover:bg-white/10 active:scale-[0.98] transition text-gray-200 hover:text-white">
+                            Need Help?
+                        </button>
+                    </div>
+
+                    <!-- Bottom Switch Account Prompt -->
+                    <div class="mt-8 text-center">
+                        <p class="text-[12px] text-gray-400">
+                            <span id="text-auth-switch-prompt">Don't Have Any Account?</span>
+                            <a href="#" id="link-switch-auth" class="text-white font-semibold hover:underline ml-1 cursor-pointer">Sign Up</a>
                         </p>
                     </div>
                 </form>
