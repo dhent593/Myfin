@@ -786,7 +786,7 @@ function openModal(contentHtml) {
   if (!modalsRoot) return;
   modalsRoot.innerHTML = `
     <div id="active-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 modal-backdrop opacity-0">
-      <div class="w-full max-w-sm app-bg border border-white/10 rounded-3xl p-6 shadow-2xl modal-content transform scale-95 opacity-0 text-white relative">
+      <div class="w-full max-w-sm app-bg border border-white/10 rounded-3xl p-6 shadow-2xl modal-content transform scale-95 opacity-0 text-white relative max-h-[90vh] overflow-y-auto hide-scroll">
         ${contentHtml}
       </div>
     </div>
