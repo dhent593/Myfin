@@ -58,19 +58,29 @@ let currentPage = 'onboarding';
 export function navigate(target) {
   if (target === currentPage) return;
 
-  const currentIndex = pages.indexOf(currentPage);
+  const previousPage = currentPage;
+  const currentIndex = pages.indexOf(previousPage);
   const targetIndex = pages.indexOf(target);
+
+  const isEnteringFromBottom = (previousPage === 'onboarding' && target === 'signin');
+  const isExitingToBottom = (previousPage === 'signin' && target === 'onboarding');
 
   pages.forEach((page, index) => {
     const el = document.getElementById('page-' + page);
     if (!el) return;
 
-    if (index < targetIndex) {
-      el.className = 'page-container page-hidden-left hide-scroll';
-    } else if (index > targetIndex) {
-      el.className = 'page-container page-hidden-right hide-scroll';
-    } else {
+    if (page === target) {
       el.className = 'page-container page-active hide-scroll ' + (navPages.includes(page) ? 'pb-[100px]' : '');
+    } else {
+      if (page === 'onboarding' && isEnteringFromBottom) {
+        el.className = 'page-container page-hidden-top hide-scroll';
+      } else if (page === 'signin' && (isExitingToBottom || target === 'onboarding')) {
+        el.className = 'page-container page-hidden-bottom hide-scroll';
+      } else if (index < targetIndex) {
+        el.className = 'page-container page-hidden-left hide-scroll';
+      } else {
+        el.className = 'page-container page-hidden-right hide-scroll';
+      }
     }
   });
 

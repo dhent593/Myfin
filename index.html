@@ -33,9 +33,10 @@
         <!-- PAGE 1: ONBOARDING                                                   -->
         <!-- ==================================================================== -->
         <div id="page-onboarding" class="page-container page-active hide-scroll pb-6">
-            <div id="onboarding-hero" class="relative h-[55%] w-full flex items-center justify-center overflow-hidden">
-                <div class="shape-blob shape-blob-1 w-52 h-52 bg-purple-600/30 top-10 left-[-20px]"></div>
-                <div class="shape-blob shape-blob-2 w-44 h-44 bg-blue-500/25 bottom-10 right-10"></div>
+            <div id="onboarding-hero" class="relative h-[55%] w-full flex items-center justify-center overflow-hidden pointer-events-none">
+                <div class="blob-animated-purple w-64 h-64 bg-purple-600/40"></div>
+                <div class="blob-animated-blue w-60 h-60 bg-blue-600/35"></div>
+                <div class="blob-animated-accent w-48 h-48 bg-fuchsia-600/25"></div>
             </div>
             <div class="px-6 h-[45%] flex flex-col justify-end pb-10 relative z-10">
                 <h1 class="text-[28px] font-bold leading-tight mb-3">Sustainable solution<br>for the future</h1>
@@ -47,9 +48,9 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- PAGE 2: SIGN IN & REGISTER (Tabbed)                                   -->
+        <!-- PAGE 2: SIGN IN & REGISTER (Tabbed - Slide Up from Bottom)            -->
         <!-- ==================================================================== -->
-        <div id="page-signin" class="page-container page-hidden-right hide-scroll">
+        <div id="page-signin" class="page-container page-hidden-bottom hide-scroll">
             <div class="min-h-full flex flex-col justify-center px-6 py-10">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="w-11 h-11 rounded-2xl overflow-hidden shadow-lg shadow-purple-500/25 flex items-center justify-center bg-[#1a1738]/50 border border-white/10">
