@@ -138,21 +138,36 @@ body.light-mode input:-webkit-autofill:active {
     z-index: 1; 
 }
 
-/* Floating Rounded Island Nav Bar (No border, Soft Deep Shadow & Ambient Glow) */
+/* Floating Rounded Island Nav Bar (True Glassmorphism) */
 .nav-bar { 
     position: absolute;
     bottom: 1.25rem;
-    left: 1rem;
-    right: 1rem;
-    height: 68px;
-    border-radius: 30px;
-    background: rgba(26, 27, 47, 0.82);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: none !important;
-    box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.65), 0 0 25px rgba(91, 85, 249, 0.16);
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 64px;
+    border-radius: 32px;
+    background: rgba(22, 24, 44, 0.65) !important;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.7), 0 0 25px rgba(91, 85, 249, 0.2) !important;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; 
     z-index: 30; 
+}
+
+#nav-btn-add {
+    box-shadow: 0 8px 22px rgba(91, 85, 249, 0.55), 0 0 15px rgba(144, 56, 244, 0.35);
+}
+#nav-btn-add:hover {
+    box-shadow: 0 12px 28px rgba(91, 85, 249, 0.75), 0 0 20px rgba(144, 56, 244, 0.5);
+}
+
+/* Home Page: Fixed Top Area & Scrollable Transactions Only */
+#page-home.page-active {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
 }
 
 /* Nav Button Smooth Animations */
@@ -247,9 +262,12 @@ body.light-mode .glass-input:focus {
 
 /* Nav bar overrides */
 body.light-mode .nav-bar { 
-    background-color: rgba(255, 255, 255, 0.88) !important; 
-    border: none !important; 
-    box-shadow: 0 14px 35px -6px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+    background-color: rgba(255, 255, 255, 0.75) !important; 
+    border: 1px solid rgba(0, 0, 0, 0.08) !important; 
+    box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+}
+body.light-mode #nav-btn-add {
+    border-color: #f8fafc !important;
 }
 
 /* Keep gradient contents white */

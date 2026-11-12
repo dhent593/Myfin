@@ -70,7 +70,11 @@ export function navigate(target) {
     if (!el) return;
 
     if (page === target) {
-      el.className = 'page-container page-active hide-scroll ' + (navPages.includes(page) ? 'pb-[100px]' : '');
+      if (page === 'home') {
+        el.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[85px]';
+      } else {
+        el.className = 'page-container page-active hide-scroll ' + (navPages.includes(page) ? 'pb-[100px]' : '');
+      }
     } else {
       if (page === 'onboarding' && isEnteringFromBottom) {
         el.className = 'page-container page-hidden-top hide-scroll';
@@ -249,7 +253,7 @@ function renderHomePage() {
         </div>
       `;
     } else {
-      recentContainer.innerHTML = state.transactions.slice(0, 4).map(tx => {
+      recentContainer.innerHTML = state.transactions.slice(0, 15).map(tx => {
         const isExp = tx.type === 'expense';
         const isInc = tx.type === 'income';
         const isTf = tx.type === 'transfer';
@@ -1490,6 +1494,9 @@ function bindAppEvents() {
       if (target) navigate(target);
     });
   });
+
+  // Center Action Button in Bottom Nav: Quick Add Transaction
+  document.getElementById('nav-btn-add')?.addEventListener('click', () => navigate('add-transaction'));
 
   // Theme Toggle
   document.getElementById('btn-toggle-theme')?.addEventListener('click', toggleTheme);
