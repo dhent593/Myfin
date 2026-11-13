@@ -14,10 +14,35 @@ export function isSupabaseConfigured() {
   return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_URL.startsWith('http'));
 }
 
+/**
+ * Deteksi apakah sebuah JWT token adalah service_role secret key
+ * @param {string} key
+ * @returns {boolean}
+ */
+export function isServiceRoleKey(key) {
+  if (!key || typeof key !== 'string') return false;
+  try {
+    const parts = key.split('.');
+    if (parts.length === 3) {
+      // Decode JWT payload (base64url)
+      const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      return payload && payload.role === 'service_role';
+    }
+  } catch {
+    // Abaikan jika bukan format JWT
+  }
+  return false;
+}
+
 export function saveSupabaseConfig(url, key) {
   if (url && key) {
+    const cleanKey = key.trim();
+    if (isServiceRoleKey(cleanKey)) {
+      throw new Error('PERINGATAN KEAMANAN: Kunci yang Anda masukkan adalah "service_role" (kunci rahasia server dengan akses penuh yang membypass RLS). Demi keamanan database Anda, harap gunakan "anon / public" key.');
+    }
     localStorage.setItem('dompetku_sb_url', url.trim());
-    localStorage.setItem('dompetku_sb_key', key.trim());
+    localStorage.setItem('dompetku_sb_key', cleanKey);
     window.location.reload();
   }
 }

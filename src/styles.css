@@ -119,43 +119,59 @@ body.light-mode input:-webkit-autofill:active {
 .hide-scroll::-webkit-scrollbar { display: none; }
 .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* SPA Transitions */
+/* SPA Transitions with GPU Hardware Acceleration */
 .page-container { 
     position: absolute; 
     inset: 0; 
     overflow-y: auto; 
     overflow-x: hidden; 
-    transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.45s ease; 
+    -webkit-overflow-scrolling: touch;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease, visibility 0.28s; 
 }
 .page-active { 
-    transform: translate(0, 0) scale(1); 
+    transform: translate3d(0, 0, 0) scale(1); 
     opacity: 1; 
     pointer-events: auto; 
+    visibility: visible;
     z-index: 10; 
 }
 .page-hidden-left { 
-    transform: translateX(-30%); 
+    transform: translate3d(-20%, 0, 0); 
     opacity: 0; 
     pointer-events: none; 
+    visibility: hidden;
     z-index: 1; 
 }
 .page-hidden-right { 
-    transform: translateX(100%); 
+    transform: translate3d(100%, 0, 0); 
     opacity: 0; 
     pointer-events: none; 
+    visibility: hidden;
     z-index: 5; 
 }
 .page-hidden-bottom { 
-    transform: translateY(100%); 
+    transform: translate3d(0, 100%, 0); 
     opacity: 0; 
     pointer-events: none; 
+    visibility: hidden;
     z-index: 25; 
 }
 .page-hidden-top { 
-    transform: translateY(-20%) scale(0.96); 
+    transform: translate3d(0, -20%, 0) scale(0.97); 
     opacity: 0; 
     pointer-events: none; 
+    visibility: hidden;
     z-index: 1; 
+}
+
+/* Pause heavy background animations when not on Onboarding */
+#page-onboarding:not(.page-active) [class*="blob-animated-"] {
+    animation-play-state: paused !important;
+    display: none !important;
 }
 
 /* Bottom Nav Bar (Docked Native FinTech Navigation) */
@@ -174,7 +190,7 @@ body.light-mode input:-webkit-autofill:active {
     -webkit-backdrop-filter: blur(25px);
     border: none !important;
     box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.45);
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; 
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease; 
     z-index: 40; 
     box-sizing: border-box;
 }

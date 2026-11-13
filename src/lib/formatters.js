@@ -3,6 +3,21 @@
 // ==============================================================================
 
 /**
+ * Sanitasi string untuk mencegah Cross-Site Scripting (XSS) pada innerHTML
+ * @param {string} str
+ * @returns {string}
+ */
+export function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
  * Format angka ke format mata uang Rupiah (IDR)
  * @param {number} amount
  * @param {boolean} withPrefix - Tampilkan "Rp" atau tidak

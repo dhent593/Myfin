@@ -54,6 +54,22 @@ export function notify() {
   });
 }
 
+/**
+ * Reset seluruh data state ke kondisi kosong (misal saat logout)
+ * Mencegah data kebocoran memori antar-sesi pengguna
+ */
+export function resetState() {
+  state.currentUser = null;
+  state.pockets = [];
+  state.categories = [];
+  state.transactions = [];
+  state.budgets = [];
+  state.debts = [];
+  state.assets = [];
+  state.archives = [];
+  notify();
+}
+
 // ==============================================================================
 // KALKULASI SALDO DINAMIS (REAL-TIME ENGINE)
 // ==============================================================================

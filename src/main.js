@@ -16,9 +16,11 @@ import {
   updatePocketsOrder,
   payDebtInstallment,
   archiveOldYearTransactions,
-  fetchArchivedTransactions
+  fetchArchivedTransactions,
+  resetState
 } from './lib/state.js';
 import {
+  escapeHtml,
   formatRupiah,
   formatCompact,
   formatDate,
@@ -65,27 +67,41 @@ export function navigate(target) {
   const isEnteringFromBottom = (previousPage === 'onboarding' && target === 'signin');
   const isExitingToBottom = (previousPage === 'signin' && target === 'onboarding');
 
-  pages.forEach((page, index) => {
-    const el = document.getElementById('page-' + page);
-    if (!el) return;
+  // Siapkan data & view target terlebih dahulu sebelum animasi berjalan
+  renderCurrentPageView(target);
 
-    if (page === target) {
-      if (page === 'home') {
-        el.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[96px]';
-      } else if (page === 'onboarding') {
-        el.className = 'page-container page-active hide-scroll relative overflow-hidden flex flex-col justify-between';
-      } else {
-        el.className = 'page-container page-active hide-scroll ' + (navPages.includes(page) ? 'pb-[100px]' : '');
-      }
+  const targetEl = document.getElementById('page-' + target);
+  const prevEl = document.getElementById('page-' + previousPage);
+
+  if (targetEl) {
+    targetEl.scrollTop = 0;
+    if (target === 'home') {
+      targetEl.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[96px]';
+    } else if (target === 'onboarding') {
+      targetEl.className = 'page-container page-active hide-scroll relative overflow-hidden flex flex-col justify-between';
     } else {
-      if (page === 'onboarding' && isEnteringFromBottom) {
-        el.className = 'page-container page-hidden-top hide-scroll';
-      } else if (page === 'signin' && (isExitingToBottom || target === 'onboarding')) {
-        el.className = 'page-container page-hidden-bottom hide-scroll';
-      } else if (index < targetIndex) {
-        el.className = 'page-container page-hidden-left hide-scroll';
-      } else {
-        el.className = 'page-container page-hidden-right hide-scroll';
+      targetEl.className = 'page-container page-active hide-scroll ' + (navPages.includes(target) ? 'pb-[100px]' : '');
+    }
+  }
+
+  if (prevEl) {
+    if (previousPage === 'onboarding' && isEnteringFromBottom) {
+      prevEl.className = 'page-container page-hidden-top hide-scroll';
+    } else if (previousPage === 'signin' && (isExitingToBottom || target === 'onboarding')) {
+      prevEl.className = 'page-container page-hidden-bottom hide-scroll';
+    } else if (currentIndex < targetIndex) {
+      prevEl.className = 'page-container page-hidden-left hide-scroll';
+    } else {
+      prevEl.className = 'page-container page-hidden-right hide-scroll';
+    }
+  }
+
+  // Jaga halaman non-aktif lainnya tetap hidden tanpa memicu reflow massal
+  pages.forEach((page, index) => {
+    if (page !== target && page !== previousPage) {
+      const el = document.getElementById('page-' + page);
+      if (el && el.classList.contains('page-active')) {
+        el.className = 'page-container ' + (index < targetIndex ? 'page-hidden-left' : 'page-hidden-right') + ' hide-scroll';
       }
     }
   });
@@ -115,9 +131,6 @@ export function navigate(target) {
       activeBtn.classList.add('active', 'text-white');
     }
   }
-
-  // Auto Refresh View on Navigate
-  renderCurrentPageView(target);
 }
 
 // ==============================================================================
@@ -209,7 +222,7 @@ function renderHomePage() {
         return `
           <div class="pocket-solid-card w-[136px] min-w-[136px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
-              <p class="text-xs font-bold text-white/95 truncate mb-1">${pocket.name}</p>
+              <p class="text-xs font-bold text-white/95 truncate mb-1">${escapeHtml(pocket.name)}</p>
               <h4 class="text-[15px] font-black text-white tracking-tight leading-snug mb-2 truncate">${formatRupiah(balance)}</h4>
             </div>
 
@@ -272,8 +285,8 @@ function renderHomePage() {
                 <i class="fas ${iconClass} text-sm"></i>
               </div>
               <div>
-                <p class="font-bold text-sm text-white leading-tight">${tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi')}</p>
-                <p class="text-xs text-gray-400 mt-0.5">${formatDate(tx.date)} ${tx.notes ? '• ' + tx.notes : ''}</p>
+                <p class="font-bold text-sm text-white leading-tight">${escapeHtml(tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi'))}</p>
+                <p class="text-xs text-gray-400 mt-0.5">${formatDate(tx.date)} ${tx.notes ? '• ' + escapeHtml(tx.notes) : ''}</p>
               </div>
             </div>
             <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
@@ -346,7 +359,7 @@ function renderStatsPage() {
         const matchingTxs = monthExpenses.filter(t => t.category_name === b.category_name);
         const txsListHtml = matchingTxs.length ? matchingTxs.map(tx => `
           <div class="flex justify-between items-center py-1.5 border-b border-white/5 last:border-0 text-[11px]">
-            <span class="text-gray-300">${formatDate(tx.date)} ${tx.notes ? '• ' + tx.notes : ''}</span>
+            <span class="text-gray-300">${formatDate(tx.date)} ${tx.notes ? '• ' + escapeHtml(tx.notes) : ''}</span>
             <span class="font-semibold text-white">-${formatRupiah(tx.amount)}</span>
           </div>
         `).join('') : '<p class="text-[10px] text-gray-500 py-1">Belum ada transaksi di bulan ini.</p>';
@@ -355,7 +368,7 @@ function renderStatsPage() {
           <div class="glass rounded-2xl overflow-hidden transition-all duration-300 border border-white/5">
             <div class="p-4 cursor-pointer hover:bg-white/5 transition" onclick="window.toggleBudgetExpand('${idx}')">
               <div class="flex justify-between items-center mb-2">
-                <span class="font-semibold text-xs text-white">${b.category_name}</span>
+                <span class="font-semibold text-xs text-white">${escapeHtml(b.category_name)}</span>
                 <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold ${badgeColor}">
                   ${percent}% ${isOverBudget ? '(Over)' : ''}
                 </span>
@@ -437,7 +450,7 @@ function renderWalletPage() {
                   <i class="fas ${p.icon || 'fa-wallet'} text-sm"></i>
                 </div>
                 <div>
-                  <h4 class="font-bold text-xs text-white">${p.name}</h4>
+                  <h4 class="font-bold text-xs text-white">${escapeHtml(p.name)}</h4>
                   <p class="text-[10px] text-gray-400">Saldo Awal: ${formatRupiah(p.initial_balance)}</p>
                 </div>
               </div>
@@ -527,13 +540,13 @@ function renderWalletPage() {
                 <i class="fas ${categoryIcons[a.category] || 'fa-box'}"></i>
               </div>
               <div>
-                <h4 class="font-bold text-xs text-white">${a.name}</h4>
-                <p class="text-[10px] text-gray-400 capitalize">${a.category} <span class="text-purple-300 font-medium">${noteExtra}</span></p>
+                <h4 class="font-bold text-xs text-white">${escapeHtml(a.name)}</h4>
+                <p class="text-[10px] text-gray-400 capitalize">${escapeHtml(a.category)} <span class="text-purple-300 font-medium">${noteExtra}</span></p>
               </div>
             </div>
             <div class="text-right">
               <p class="font-bold text-xs text-white">${formatRupiah(displayValue)}</p>
-              <p class="text-[9px] text-gray-500">${a.notes || 'Aset Aktif'}</p>
+              <p class="text-[9px] text-gray-500">${escapeHtml(a.notes || 'Aset Aktif')}</p>
             </div>
           </div>
         `;
@@ -584,7 +597,7 @@ function renderDebtsPage() {
               ${typeBadge}
               ${d.due_date ? `<span class="text-[9px] text-gray-400"><i class="fas fa-clock mr-1 text-[8px]"></i>Jatuh tempo: ${formatDate(d.due_date)}</span>` : ''}
             </div>
-            <h4 class="font-bold text-sm text-white">${d.person_name}</h4>
+            <h4 class="font-bold text-sm text-white">${escapeHtml(d.person_name)}</h4>
           </div>
           <div class="text-right">
             <span class="text-[10px] text-gray-400 block">Sisa Pembayaran</span>
@@ -679,8 +692,8 @@ function renderTransactionsPage() {
               <i class="fas ${icon} text-sm text-gray-300"></i>
             </div>
             <div>
-              <p class="font-bold text-sm text-white leading-tight">${tx.category_name || (tx.type === 'transfer' ? 'Pindah Dana' : 'Transaksi')}</p>
-              <p class="text-xs text-gray-400 mt-0.5">${tx.notes || formatDate(tx.date)}</p>
+              <p class="font-bold text-sm text-white leading-tight">${escapeHtml(tx.category_name || (tx.type === 'transfer' ? 'Pindah Dana' : 'Transaksi'))}</p>
+              <p class="text-xs text-gray-400 mt-0.5">${escapeHtml(tx.notes) || formatDate(tx.date)}</p>
             </div>
           </div>
           <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
@@ -744,7 +757,7 @@ function setupAddTransactionForm() {
   const destSelect = document.getElementById('select-tx-dest-pocket');
   
   const optionsHtml = state.pockets.map(p => `
-    <option value="${p.id}" class="bg-[#1a1b2f] text-white">${p.name} (Saldo: ${formatCompact(calculatePocketBalance(p.id))})</option>
+    <option value="${p.id}" class="bg-[#1a1b2f] text-white">${escapeHtml(p.name)} (Saldo: ${formatCompact(calculatePocketBalance(p.id))})</option>
   `).join('');
 
   if (sourceSelect) sourceSelect.innerHTML = optionsHtml;
@@ -753,7 +766,7 @@ function setupAddTransactionForm() {
   // Datalist categories
   const datalist = document.getElementById('category-datalist');
   if (datalist) {
-    datalist.innerHTML = state.categories.map(c => `<option value="${c.name}">`).join('');
+    datalist.innerHTML = state.categories.map(c => `<option value="${escapeHtml(c.name)}">`).join('');
   }
 
   // Update type buttons
@@ -1068,7 +1081,7 @@ window.openPayDebtModal = function(debtId) {
         </label>
         <select id="select-pay-pocket" class="w-full glass-input rounded-xl py-3 px-3 text-xs bg-[#1a1b2f]" required>
           ${state.pockets.map(p => `
-            <option value="${p.id}">${p.name} (Saldo: ${formatCompact(calculatePocketBalance(p.id))})</option>
+            <option value="${p.id}">${escapeHtml(p.name)} (Saldo: ${formatCompact(calculatePocketBalance(p.id))})</option>
           `).join('')}
         </select>
       </div>
@@ -1139,7 +1152,7 @@ function openAddAssetModal() {
         <select id="input-asset-linked-pocket" class="w-full glass-input rounded-xl py-3 px-3 text-xs bg-[#1a1b2f]">
           <option value="">-- Tanpa Sinkronisasi (Manual) --</option>
           ${state.pockets.map(p => `
-            <option value="${p.id}">${p.name}</option>
+            <option value="${p.id}">${escapeHtml(p.name)}</option>
           `).join('')}
         </select>
       </div>
@@ -1295,7 +1308,11 @@ function openSupabaseSetupModal() {
     const url = document.getElementById('input-sb-url')?.value.trim();
     const key = document.getElementById('input-sb-key')?.value.trim();
     if (url && key) {
-      saveSupabaseConfig(url, key);
+      try {
+        saveSupabaseConfig(url, key);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
     }
   });
 }
@@ -1874,7 +1891,7 @@ function bindAppEvents() {
   // Logout
   document.getElementById('btn-logout')?.addEventListener('click', async () => {
     localStorage.removeItem('dompetku_user');
-    state.currentUser = null;
+    resetState();
     if (supabase) await supabase.auth.signOut();
     showToast('Berhasil keluar dari akun', 'info');
     navigate('onboarding');

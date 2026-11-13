@@ -23,21 +23,31 @@ export function exportTransactionsToCsv(transactions = [], pockets = [], filenam
   // Header CSV
   const headers = ['Tanggal', 'Jenis', 'Kategori', 'Kantong Sumber', 'Kantong Tujuan', 'Nominal (IDR)', 'Keterangan'];
 
+  // Helper untuk sanitasi sel CSV dari formula injection (=, +, -, @)
+  const sanitizeCell = (val) => {
+    if (val === null || val === undefined) return '""';
+    let str = String(val).replace(/"/g, '""');
+    // Jika diawali karakter formula Excel, beri tanda petik satu (') agar dianggap teks murni
+    if (/^[=+\-@\t\r]/.test(str)) {
+      str = `'` + str;
+    }
+    return `"${str}"`;
+  };
+
   // Baris data
   const rows = transactions.map(t => {
     const jenis = t.type === 'expense' ? 'Pengeluaran' : (t.type === 'income' ? 'Pemasukan' : 'Pindah Dana (Transfer)');
     const pocketFrom = pocketMap[t.pocket_id] || '-';
     const pocketTo = t.destination_pocket_id ? (pocketMap[t.destination_pocket_id] || '-') : '-';
-    const cleanNotes = (t.notes || '').replace(/"/g, '""');
 
     return [
-      `"${t.date}"`,
-      `"${jenis}"`,
-      `"${t.category_name || '-'}"`,
-      `"${pocketFrom}"`,
-      `"${pocketTo}"`,
-      t.amount,
-      `"${cleanNotes}"`
+      sanitizeCell(t.date),
+      sanitizeCell(jenis),
+      sanitizeCell(t.category_name || '-'),
+      sanitizeCell(pocketFrom),
+      sanitizeCell(pocketTo),
+      Number(t.amount) || 0,
+      sanitizeCell(t.notes || '')
     ].join(',');
   });
 

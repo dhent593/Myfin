@@ -2,7 +2,7 @@
 // DOMPETKU - SVG DONUT CHART GENERATOR (Native JS & SVG)
 // ==============================================================================
 
-import { formatRupiah, formatCompact } from '../lib/formatters.js';
+import { formatRupiah, formatCompact, escapeHtml } from '../lib/formatters.js';
 
 /**
  * Render donut chart SVG langsung ke container DOM
@@ -66,7 +66,7 @@ export function renderDonutChart(containerEl, items = [], centerTitle = 'Total',
       <div class="flex items-center justify-between text-xs py-1 border-b border-white/5 last:border-0">
         <div class="flex items-center gap-2">
           <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${item.color || '#5b55f9'}"></span>
-          <span class="font-medium text-gray-300">${item.label}</span>
+          <span class="font-medium text-gray-300">${escapeHtml(item.label)}</span>
         </div>
         <div class="flex items-center gap-2">
           <span class="font-bold text-white">${formatCompact(item.value)}</span>
