@@ -261,23 +261,48 @@ body.light-mode .mobile-container {
 }
 
 /* Typography Overrides */
-body.light-mode .text-gray-400, 
-body.light-mode .text-gray-300, 
-body.light-mode .text-gray-500 { 
-    color: #64748b !important; 
-}
 body.light-mode .text-gray-100 { 
     color: #0f172a !important; 
+}
+body.light-mode .text-gray-200 { 
+    color: #1e293b !important; 
+}
+body.light-mode .text-gray-300 { 
+    color: #334155 !important; 
+}
+body.light-mode .text-gray-400 { 
+    color: #475569 !important; 
+}
+body.light-mode .text-gray-500 { 
+    color: #64748b !important; 
 }
 body.light-mode .text-purple-300,
 body.light-mode .text-purple-400 { 
     color: #5b55f9 !important; 
 }
+body.light-mode .text-green-300,
 body.light-mode .text-green-400 {
     color: #16a34a !important;
 }
+body.light-mode .text-red-300,
 body.light-mode .text-red-400 {
     color: #dc2626 !important;
+}
+body.light-mode .text-amber-400,
+body.light-mode .text-yellow-400 {
+    color: #d97706 !important;
+}
+body.light-mode .text-cyan-400 {
+    color: #0284c7 !important;
+}
+body.light-mode .text-emerald-400 {
+    color: #16a34a !important;
+}
+
+/* Form Labels & Section Typography across all pages and modals */
+body.light-mode label {
+    color: #1e293b !important;
+    font-weight: 600;
 }
 
 /* Base text-white override: exclude all solid color cards, badges, and gradient buttons */
@@ -300,6 +325,59 @@ body.light-mode .pocket-solid-card .text-white\/80 {
 }
 body.light-mode .pocket-solid-card .text-white\/95 {
     color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Onboarding Page in Light Mode */
+body.light-mode #page-onboarding h1 {
+    color: #0f172a !important;
+}
+body.light-mode #page-onboarding p {
+    color: #334155 !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Sign In Page in Light Mode */
+body.light-mode #page-signin h1 {
+    color: #0f172a !important;
+}
+body.light-mode #auth-subtitle,
+body.light-mode #page-signin p.text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode #page-signin label {
+    color: #1e293b !important;
+    font-weight: 600;
+}
+body.light-mode #auth-remember ~ span {
+    color: #334155 !important;
+    font-weight: 600;
+}
+body.light-mode #text-auth-switch-prompt {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode #link-switch-auth {
+    color: #5b55f9 !important;
+    font-weight: 700 !important;
+}
+body.light-mode #link-switch-auth:hover {
+    color: #4338ca !important;
+}
+
+/* Home Page in Light Mode */
+body.light-mode #page-home p.text-gray-400 {
+    color: #475569 !important;
+    font-weight: 600;
+}
+body.light-mode #page-home h3 {
+    color: #0f172a !important;
+}
+body.light-mode #home-recent-transactions p.text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
 }
 
 /* Net Worth Card in Light Mode: subtle shadow without purple haze */
@@ -334,7 +412,7 @@ body.light-mode .glass-input:focus {
 }
 
 /* Backgrounds & Borders Overrides */
-body.light-mode .bg-white\/5 { background-color: rgba(0, 0, 0, 0.04) !important; }
+body.light-mode .bg-white\/5 { background-color: rgba(0, 0, 0, 0.05) !important; }
 body.light-mode .bg-white\/10 { background-color: rgba(0, 0, 0, 0.08) !important; }
 body.light-mode .bg-white\/20 { background-color: rgba(0, 0, 0, 0.12) !important; }
 body.light-mode .border-white\/5,
@@ -353,7 +431,7 @@ body.light-mode .border-dashed:hover {
     background: rgba(91, 85, 249, 0.04) !important;
 }
 body.light-mode .border-dashed .text-gray-300 {
-    color: #475569 !important;
+    color: #334155 !important;
 }
 body.light-mode .border-dashed:hover .text-gray-300 {
     color: #5b55f9 !important;
@@ -381,16 +459,229 @@ body.light-mode #nav-btn-add {
     box-shadow: 0 4px 16px rgba(91, 85, 249, 0.35) !important;
 }
 
-/* Filter Tabs & Selectors */
+/* Filter Tabs & Switchers in Light Mode */
 body.light-mode .btn-filter-tab.bg-white\/10 {
     background-color: #5b55f9 !important;
     color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(91, 85, 249, 0.3) !important;
+}
+body.light-mode .btn-filter-tab:not(.bg-white\/10) {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    background: rgba(0, 0, 0, 0.04) !important;
+}
+body.light-mode .btn-filter-tab:not(.bg-white\/10):hover {
+    color: #0f172a !important;
+    background: rgba(0, 0, 0, 0.08) !important;
+}
+
+body.light-mode #tab-wallet-assets:not(.btn-gradient),
+body.light-mode #tab-wallet-pockets:not(.btn-gradient),
+body.light-mode #filter-debt-active:not(.btn-gradient),
+body.light-mode #filter-debt-settled:not(.btn-gradient) {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+}
+body.light-mode #tab-wallet-assets:not(.btn-gradient):hover,
+body.light-mode #tab-wallet-pockets:not(.btn-gradient):hover,
+body.light-mode #filter-debt-active:not(.btn-gradient):hover,
+body.light-mode #filter-debt-settled:not(.btn-gradient):hover {
+    color: #0f172a !important;
+}
+
+/* Wallet Page Pocket Items */
+body.light-mode #view-wallet-pockets .text-gray-400,
+body.light-mode #view-wallet-assets .text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode .pocket-drag-item {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+body.light-mode .pocket-drag-item h4 {
+    color: #0f172a !important;
+}
+body.light-mode .pocket-drag-item p.text-gray-400,
+body.light-mode .pocket-drag-item span.text-gray-400 {
+    color: #475569 !important;
+}
+body.light-mode .pocket-drag-item .bg-white\/5 {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Transactions Page in Light Mode */
+body.light-mode #page-transactions h2 {
+    color: #0f172a !important;
+}
+body.light-mode #transactions-grouped-list p.text-gray-400 {
+    color: #334155 !important;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+body.light-mode #transactions-grouped-list .w-11 .text-gray-300,
+body.light-mode #home-recent-transactions .w-11 .text-gray-300 {
+    color: #1e293b !important;
+}
+body.light-mode #btn-export-csv {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    color: #16a34a !important;
+}
+body.light-mode #btn-export-csv i {
+    color: #16a34a !important;
+}
+body.light-mode #input-search-tx {
+    color: #0f172a !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+body.light-mode #input-search-tx::placeholder {
+    color: #64748b !important;
+}
+
+/* Add Transaction Page in Light Mode */
+body.light-mode #page-add-transaction h2 {
+    color: #0f172a !important;
+}
+body.light-mode #page-add-transaction p.text-gray-400 {
+    color: #475569 !important;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+body.light-mode #page-add-transaction span.text-gray-400 {
+    color: #1e293b !important;
+    font-weight: 800;
+}
+body.light-mode #input-tx-amount {
+    color: #0f172a !important;
+    font-weight: 800;
+}
+body.light-mode #input-tx-amount::placeholder {
+    color: #94a3b8 !important;
+}
+body.light-mode #page-add-transaction .bg-white\/5.p-1 {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 body.light-mode #btn-tx-type-expense.bg-white\/10,
 body.light-mode #btn-tx-type-income.bg-white\/10,
 body.light-mode #btn-tx-type-transfer.bg-white\/10 {
     background-color: #5b55f9 !important;
     color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(91, 85, 249, 0.3) !important;
+}
+body.light-mode #btn-tx-type-expense:not(.bg-white\/10),
+body.light-mode #btn-tx-type-income:not(.bg-white\/10),
+body.light-mode #btn-tx-type-transfer:not(.bg-white\/10) {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+}
+body.light-mode #btn-tx-type-expense:not(.bg-white\/10):hover,
+body.light-mode #btn-tx-type-income:not(.bg-white\/10):hover,
+body.light-mode #btn-tx-type-transfer:not(.bg-white\/10):hover {
+    color: #0f172a !important;
+}
+body.light-mode #page-add-transaction label {
+    color: #1e293b !important;
+    font-weight: 600;
+}
+body.light-mode #field-category p.text-gray-400 {
+    color: #64748b !important;
+    font-weight: 400;
+}
+
+/* Circular Header & Action Buttons in Light Mode */
+body.light-mode #btn-tx-back,
+body.light-mode #btn-stats-back,
+body.light-mode #btn-debts-back,
+body.light-mode #btn-add-tx-back,
+body.light-mode #btn-open-set-budget,
+body.light-mode #btn-add-pocket-modal,
+body.light-mode #btn-open-add-debt,
+body.light-mode #btn-open-edit-profile,
+body.light-mode #btn-home-profile {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    color: #0f172a !important;
+}
+body.light-mode #btn-tx-back i,
+body.light-mode #btn-stats-back i,
+body.light-mode #btn-debts-back i,
+body.light-mode #btn-add-tx-back i,
+body.light-mode #btn-open-set-budget i,
+body.light-mode #btn-add-pocket-modal i,
+body.light-mode #btn-open-add-debt i,
+body.light-mode #btn-open-edit-profile i,
+body.light-mode #btn-home-profile i {
+    color: #0f172a !important;
+}
+
+/* Select & Input Elements in Light Mode */
+body.light-mode select,
+body.light-mode select.glass-input,
+body.light-mode select.bg-\[\#1a1b2f\] {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+body.light-mode select option {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+body.light-mode .relative > i.fas:not(#btn-toggle-password):not(.fa-chevron-down) {
+    color: #64748b !important;
+}
+body.light-mode .relative:focus-within > i.fas:not(#btn-toggle-password):not(.fa-chevron-down) {
+    color: #5b55f9 !important;
+}
+
+/* Stats & Budgets in Light Mode */
+body.light-mode #page-stats .text-gray-400 {
+    color: #475569 !important;
+    font-weight: 600;
+}
+body.light-mode #stats-current-month-badge {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+    color: #334155 !important;
+    font-weight: 600;
+}
+body.light-mode #stats-budget-list .text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode #stats-budget-list .text-gray-300 {
+    color: #1e293b !important;
+    font-weight: 700;
+}
+body.light-mode #stats-budget-list .bg-black\/10 {
+    background-color: rgba(241, 245, 249, 0.7) !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+body.light-mode #stats-budget-list .bg-white\/5 {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Debts & Receivables in Light Mode */
+body.light-mode #debts-list-container .text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode #debts-list-container .bg-white\/5 {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Settings in Light Mode */
+body.light-mode #page-settings .text-\[10px\].text-gray-400 {
+    color: #475569 !important;
+    font-weight: 500;
+}
+body.light-mode #page-settings .fa-chevron-right {
+    color: #64748b !important;
+}
+body.light-mode #page-settings .fa-user-circle {
+    color: #475569 !important;
 }
 
 /* Amount Input in Add Transaction */
