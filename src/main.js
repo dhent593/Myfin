@@ -288,13 +288,14 @@ function renderHomePage() {
   const obEl = document.getElementById('onboarding-balance');
   if (obEl) obEl.textContent = formatRupiah(totalNetWorth);
 
-  // Pockets Snapshot (Micro-Cards: Ukuran & Font Lebih Ringkas & Rapi)
+  // Pockets Snapshot (Micro-Cards presisi sesuai referensi Dompetku)
   const pocketsContainer = document.getElementById('home-pockets-list');
   if (pocketsContainer) {
     if (!state.pockets.length) {
       pocketsContainer.innerHTML = `
-        <div class="w-full glass p-4 rounded-2xl text-center text-xs text-gray-400 border border-white/5">
-          Belum ada kantong. Klik "+ Kantong" untuk membuat kantong pertama Anda.
+        <div class="w-full glass p-3.5 rounded-[18px] text-center text-xs text-gray-400 border border-white/5 flex items-center justify-center gap-2 cursor-pointer hover:bg-white/5 transition" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+          <i class="fas fa-plus text-purple-400"></i>
+          <span>Belum ada kantong. Klik di sini untuk membuat kantong pertama.</span>
         </div>
       `;
     } else {
@@ -302,42 +303,37 @@ function renderHomePage() {
         const balance = calculatePocketBalance(pocket.id);
         const hasTarget = Boolean(pocket.target_balance && Number(pocket.target_balance) > 0);
         const targetPercent = hasTarget ? Math.min(100, Math.round((balance / Number(pocket.target_balance)) * 100)) : null;
-        const solidColor = pocket.color || '#5b55f9';
+        const solidColor = pocket.color || '#4f46e5';
+        const targetAmountText = hasTarget
+          ? (pocket.target_balance >= 10000000 ? formatCompact(pocket.target_balance) : formatRupiah(pocket.target_balance, true))
+          : '';
 
         return `
-          <div class="pocket-solid-card w-[114px] min-w-[114px] shrink-0 snap-start rounded-[16px] p-2.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
+          <div class="pocket-solid-card w-[124px] min-w-[124px] h-[86px] shrink-0 snap-start rounded-[18px] p-2.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
-              <p class="text-[10.5px] font-bold text-white/95 truncate mb-0.5">${escapeHtml(pocket.name)}</p>
-              <h4 class="text-[13px] font-black text-white tracking-tight leading-tight mb-1.5 truncate">${formatRupiah(balance)}</h4>
+              <p class="text-xs font-semibold text-white/90 truncate leading-none mb-1">${escapeHtml(pocket.name)}</p>
+              <h4 class="text-[14.5px] font-black text-white tracking-tight leading-snug truncate">${formatRupiah(balance)}</h4>
             </div>
 
-            <div class="pt-0.5">
-              ${hasTarget ? `
-                <div class="flex justify-between items-center text-[9px] text-white/90 font-medium mb-1">
-                  <span>Target: ${targetPercent}%</span>
-                  <span class="truncate ml-1 text-white/80">${formatCompact(pocket.target_balance)}</span>
-                </div>
-                <div class="w-full bg-black/25 h-1 rounded-full overflow-hidden">
-                  <div class="h-full bg-white rounded-full transition-all duration-500" style="width: ${targetPercent}%"></div>
-                </div>
-              ` : `
-                <div class="flex justify-between items-center text-[9px] text-white/85 font-medium mb-1">
-                  <span>Kantong Aktif</span>
-                  <i class="fas fa-chevron-right text-[7px] opacity-75"></i>
-                </div>
-                <div class="w-full bg-black/20 h-1 rounded-full"></div>
-              `}
+            <div>
+              <div class="flex justify-between items-center text-[10px] text-white/80 font-normal mb-1">
+                <span class="truncate">${hasTarget ? `Target: ${targetPercent}%` : 'Kantong Aktif'}</span>
+                <span class="truncate ml-1 text-white/75 font-medium">${hasTarget ? targetAmountText : ''}</span>
+              </div>
+              <div class="w-full bg-white/25 h-1.5 rounded-full overflow-hidden">
+                <div class="h-full ${hasTarget ? 'bg-white' : 'bg-white/40'} rounded-full transition-all duration-500" style="width: ${hasTarget ? targetPercent : 100}%"></div>
+              </div>
             </div>
           </div>
         `;
       }).join('');
 
       const addCardHtml = `
-        <div class="w-[84px] min-w-[84px] shrink-0 snap-start glass rounded-[16px] p-2 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+        <div class="w-[86px] min-w-[86px] h-[86px] shrink-0 snap-start glass rounded-[18px] p-2 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
           <div class="w-6 h-6 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1 shadow-sm">
             <i class="fas fa-plus text-[10px]"></i>
           </div>
-          <span class="text-[9.5px] font-bold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
+          <span class="text-[10px] font-bold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
         </div>
       `;
 

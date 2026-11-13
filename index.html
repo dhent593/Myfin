@@ -169,8 +169,13 @@
                 <!-- Primary Pocket Snapshot Slider -->
                 <div class="px-6 mb-3">
                     <div class="flex justify-between items-center mb-2.5">
-                        <h3 class="font-bold text-base text-white">Kantong Dana</h3>
-                        <span id="link-view-all-pockets" class="text-xs text-purple-300 font-semibold hover:text-white transition cursor-pointer">Kelola</span>
+                        <div class="flex items-center gap-1.5 cursor-pointer group" id="link-view-all-pockets" title="Kelola Kantong">
+                            <h3 class="font-bold text-base text-white group-hover:text-purple-300 transition">Kantong Dana</h3>
+                            <i class="fas fa-chevron-right text-[10px] text-gray-400 group-hover:text-purple-300 transition"></i>
+                        </div>
+                        <button id="btn-home-header-add-pocket" type="button" class="text-xs text-purple-300 hover:text-white font-medium flex items-center gap-1 glass px-2.5 py-1 rounded-full border border-white/10 active:scale-95 transition" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+                            <i class="fas fa-plus text-[10px]"></i> Kantong
+                        </button>
                     </div>
                     <div id="home-pockets-list" class="flex gap-2.5 overflow-x-auto hide-scroll pb-1.5 pt-0.5 snap-x snap-mandatory touch-pan-x cursor-grab">
                         <!-- Populated dynamically -->

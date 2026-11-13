@@ -372,7 +372,8 @@ body.light-mode #nav-btn-add * {
 }
 body.light-mode .pocket-solid-card .text-white\/90,
 body.light-mode .pocket-solid-card .text-white\/85,
-body.light-mode .pocket-solid-card .text-white\/80 {
+body.light-mode .pocket-solid-card .text-white\/80,
+body.light-mode .pocket-solid-card .text-white\/75 {
     color: rgba(255, 255, 255, 0.9) !important;
 }
 body.light-mode .pocket-solid-card .text-white\/95 {
@@ -487,6 +488,17 @@ body.light-mode .border-dashed .text-gray-300 {
 }
 body.light-mode .border-dashed:hover .text-gray-300 {
     color: #5b55f9 !important;
+}
+
+/* Header Add Pocket Button in Light Mode */
+body.light-mode #btn-home-header-add-pocket {
+    background: rgba(91, 85, 249, 0.08) !important;
+    border-color: rgba(91, 85, 249, 0.22) !important;
+    color: #4f46e5 !important;
+}
+body.light-mode #btn-home-header-add-pocket:hover {
+    background: rgba(91, 85, 249, 0.16) !important;
+    color: #4338ca !important;
 }
 
 /* Nav Bar in Light Mode */
