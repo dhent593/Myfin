@@ -218,12 +218,30 @@ body.light-mode input:-webkit-autofill:active {
     box-shadow: 0 6px 20px rgba(91, 85, 249, 0.6);
 }
 
-/* Home Page: Fixed Top Area & Scrollable Transactions Only */
-#page-home.page-active {
+/* Home & Transactions Page: Fixed Top Area & Scrollable Content Only */
+#page-home.page-active,
+#page-transactions.page-active {
     display: flex !important;
     flex-direction: column !important;
     height: 100% !important;
     overflow: hidden !important;
+}
+
+/* Smooth Filter Switcher Animation */
+@keyframes filterFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.filter-fade-in {
+    animation: filterFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: transform, opacity;
 }
 
 /* Nav Button Smooth Animations */
@@ -313,6 +331,24 @@ body.light-mode .text-cyan-400 {
 }
 body.light-mode .text-emerald-400 {
     color: #16a34a !important;
+}
+body.light-mode .text-pink-400 {
+    color: #db2777 !important;
+}
+body.light-mode .text-blue-400 {
+    color: #2563eb !important;
+}
+body.light-mode .text-indigo-400 {
+    color: #4f46e5 !important;
+}
+body.light-mode .text-orange-400 {
+    color: #ea580c !important;
+}
+body.light-mode .text-rose-400 {
+    color: #e11d48 !important;
+}
+body.light-mode .text-teal-400 {
+    color: #0d9488 !important;
 }
 
 /* Form Labels & Section Typography across all pages and modals */

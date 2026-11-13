@@ -77,6 +77,8 @@ export function navigate(target) {
     targetEl.scrollTop = 0;
     if (target === 'home') {
       targetEl.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden pb-[96px]';
+    } else if (target === 'transactions') {
+      targetEl.className = 'page-container page-active hide-scroll flex flex-col h-full overflow-hidden';
     } else if (target === 'onboarding') {
       targetEl.className = 'page-container page-active hide-scroll relative overflow-hidden flex flex-col justify-between';
     } else {
@@ -183,6 +185,89 @@ function renderCurrentPageView(pageName) {
 }
 
 /**
+ * Menentukan ikon FontAwesome, warna, dan background pill yang tepat secara otomatis berdasarkan nama kategori
+ * @param {string} categoryName
+ * @param {'expense'|'income'|'transfer'} type
+ * @returns {{ icon: string, color: string, bg: string }}
+ */
+export function getCategoryIcon(categoryName, type) {
+  if (type === 'transfer') {
+    return { icon: 'fa-arrow-right-arrow-left', color: 'text-purple-400', bg: 'bg-purple-500/15' };
+  }
+
+  // 1. Cek dari daftar kategori tersimpan di state
+  const matchedCategory = state.categories.find(
+    c => c.name.toLowerCase() === (categoryName || '').toLowerCase()
+  );
+  if (matchedCategory && matchedCategory.icon) {
+    const isInc = type === 'income' || matchedCategory.type === 'income';
+    return {
+      icon: matchedCategory.icon,
+      color: isInc ? 'text-green-400' : 'text-purple-400',
+      bg: isInc ? 'bg-green-500/15' : 'bg-purple-500/15'
+    };
+  }
+
+  // 2. Pencocokan cerdas berdasarkan kata kunci (Keyword Heuristics)
+  const norm = (categoryName || '').toLowerCase().trim();
+
+  // Makanan & Minuman
+  if (/makan|minum|food|kuliner|restoran|resto|kopi|coffee|cafe|snack|jajan|lunch|dinner|sarapan|bakso|mie|ayam|nasi/.test(norm)) {
+    return { icon: 'fa-utensils', color: 'text-amber-400', bg: 'bg-amber-500/15' };
+  }
+  // Belanja / Shopping
+  if (/belanja|shop|mall|supermarket|minimarket|indomaret|alfamart|baju|pakaian|fashion|elektronik|gadget|online/.test(norm)) {
+    return { icon: 'fa-shopping-bag', color: 'text-pink-400', bg: 'bg-pink-500/15' };
+  }
+  // Transportasi & Bahan Bakar
+  if (/transport|bensin|bbm|pertamax|pertalite|gojek|grab|maxim|ojol|taksi|kereta|bus|parkir|toll|tol|kendaraan|motor|mobil/.test(norm)) {
+    return { icon: 'fa-car', color: 'text-blue-400', bg: 'bg-blue-500/15' };
+  }
+  // Hiburan / Entertainment / Gaming
+  if (/hiburan|entertainment|game|gaming|steam|bioskop|cinema|film|movie|nonton|netflix|spotify|konser|wisata|liburan|rekreasi/.test(norm)) {
+    return { icon: 'fa-gamepad', color: 'text-purple-400', bg: 'bg-purple-500/15' };
+  }
+  // Tagihan & Utilitas
+  if (/tagihan|bill|listrik|pln|air|pdam|wifi|internet|pulsa|paket data|bpjs|sewa|kontrakan|kos|asuransi/.test(norm)) {
+    return { icon: 'fa-file-invoice-dollar', color: 'text-orange-400', bg: 'bg-orange-500/15' };
+  }
+  // Kesehatan & Medis
+  if (/sehat|health|obat|apotek|dokter|rumah sakit|klinik|medis|vitamin|gigi/.test(norm)) {
+    return { icon: 'fa-heart-pulse', color: 'text-rose-400', bg: 'bg-rose-500/15' };
+  }
+  // Pendidikan
+  if (/didik|education|kuliah|sekolah|buku|kursus|les|seminar|spp|pelatihan/.test(norm)) {
+    return { icon: 'fa-graduation-cap', color: 'text-indigo-400', bg: 'bg-indigo-500/15' };
+  }
+  // Gaji & Pendapatan Utama
+  if (/gaji|salary|honor|upah|paycheck|pendapatan|payroll/.test(norm)) {
+    return { icon: 'fa-money-bill-wave', color: 'text-green-400', bg: 'bg-green-500/15' };
+  }
+  // Investasi / Saham
+  if (/invest|saham|reksadana|crypto|dividen|profit|keuntungan|bunga/.test(norm)) {
+    return { icon: 'fa-chart-line', color: 'text-cyan-400', bg: 'bg-cyan-500/15' };
+  }
+  // Hadiah & Bonus
+  if (/bonus|hadiah|gift|thr|reward|giveaway|cashback/.test(norm)) {
+    return { icon: 'fa-gift', color: 'text-emerald-400', bg: 'bg-emerald-500/15' };
+  }
+  // Bisnis & Usaha
+  if (/jual|bisnis|usaha|omset|toko|freelance|proyek|client/.test(norm)) {
+    return { icon: 'fa-briefcase', color: 'text-teal-400', bg: 'bg-teal-500/15' };
+  }
+  // Hutang / Piutang
+  if (/hutang|piutang|pinjam|cicil/.test(norm)) {
+    return { icon: 'fa-hand-holding-dollar', color: 'text-yellow-400', bg: 'bg-yellow-500/15' };
+  }
+
+  // Fallback standar
+  if (type === 'income') {
+    return { icon: 'fa-arrow-down', color: 'text-green-400', bg: 'bg-green-500/15' };
+  }
+  return { icon: 'fa-receipt', color: 'text-purple-400', bg: 'bg-purple-500/15' };
+}
+
+/**
  * HOME / DASHBOARD PAGE
  */
 function renderHomePage() {
@@ -203,12 +288,12 @@ function renderHomePage() {
   const obEl = document.getElementById('onboarding-balance');
   if (obEl) obEl.textContent = formatRupiah(totalNetWorth);
 
-  // Pockets Snapshot (Compact Solid Cards like Gambar 1)
+  // Pockets Snapshot (Micro-Cards: Ukuran & Font Lebih Ringkas & Rapi)
   const pocketsContainer = document.getElementById('home-pockets-list');
   if (pocketsContainer) {
     if (!state.pockets.length) {
       pocketsContainer.innerHTML = `
-        <div class="w-full glass p-5 rounded-2xl text-center text-xs text-gray-400 border border-white/5">
+        <div class="w-full glass p-4 rounded-2xl text-center text-xs text-gray-400 border border-white/5">
           Belum ada kantong. Klik "+ Kantong" untuk membuat kantong pertama Anda.
         </div>
       `;
@@ -220,27 +305,27 @@ function renderHomePage() {
         const solidColor = pocket.color || '#5b55f9';
 
         return `
-          <div class="pocket-solid-card w-[136px] min-w-[136px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
+          <div class="pocket-solid-card w-[114px] min-w-[114px] shrink-0 snap-start rounded-[16px] p-2.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
-              <p class="text-xs font-bold text-white/95 truncate mb-1">${escapeHtml(pocket.name)}</p>
-              <h4 class="text-[15px] font-black text-white tracking-tight leading-snug mb-2 truncate">${formatRupiah(balance)}</h4>
+              <p class="text-[10.5px] font-bold text-white/95 truncate mb-0.5">${escapeHtml(pocket.name)}</p>
+              <h4 class="text-[13px] font-black text-white tracking-tight leading-tight mb-1.5 truncate">${formatRupiah(balance)}</h4>
             </div>
 
-            <div class="pt-1">
+            <div class="pt-0.5">
               ${hasTarget ? `
-                <div class="flex justify-between items-center text-[10px] text-white/90 font-medium mb-1.5">
+                <div class="flex justify-between items-center text-[9px] text-white/90 font-medium mb-1">
                   <span>Target: ${targetPercent}%</span>
                   <span class="truncate ml-1 text-white/80">${formatCompact(pocket.target_balance)}</span>
                 </div>
-                <div class="w-full bg-black/25 h-1.5 rounded-full overflow-hidden">
+                <div class="w-full bg-black/25 h-1 rounded-full overflow-hidden">
                   <div class="h-full bg-white rounded-full transition-all duration-500" style="width: ${targetPercent}%"></div>
                 </div>
               ` : `
-                <div class="flex justify-between items-center text-[10px] text-white/85 font-medium mb-1.5">
+                <div class="flex justify-between items-center text-[9px] text-white/85 font-medium mb-1">
                   <span>Kantong Aktif</span>
-                  <i class="fas fa-chevron-right text-[8px] opacity-75"></i>
+                  <i class="fas fa-chevron-right text-[7px] opacity-75"></i>
                 </div>
-                <div class="w-full bg-black/20 h-1.5 rounded-full"></div>
+                <div class="w-full bg-black/20 h-1 rounded-full"></div>
               `}
             </div>
           </div>
@@ -248,11 +333,11 @@ function renderHomePage() {
       }).join('');
 
       const addCardHtml = `
-        <div class="w-[102px] min-w-[102px] shrink-0 snap-start glass rounded-[20px] p-3 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
-          <div class="w-8 h-8 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1.5 shadow-sm">
-            <i class="fas fa-plus text-xs"></i>
+        <div class="w-[84px] min-w-[84px] shrink-0 snap-start glass rounded-[16px] p-2 flex flex-col items-center justify-center text-center border border-dashed border-white/20 hover:border-white/40 hover:bg-white/10 transition-all cursor-pointer group active:scale-[0.98]" onclick="window.dompetkuOpenAddPocketModal ? window.dompetkuOpenAddPocketModal() : null">
+          <div class="w-6 h-6 rounded-full glass border border-white/20 flex items-center justify-center text-gray-300 group-hover:text-white group-hover:scale-110 transition mb-1 shadow-sm">
+            <i class="fas fa-plus text-[10px]"></i>
           </div>
-          <span class="text-[11px] font-bold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
+          <span class="text-[9.5px] font-bold text-gray-300 group-hover:text-white leading-tight">Tambah<br>Kantong</span>
         </div>
       `;
 
@@ -260,7 +345,7 @@ function renderHomePage() {
     }
   }
 
-  // Recent Transactions (Limit 3)
+  // Recent Transactions (Limit 15 dengan Font Proporsional & Ikon Kategori Otomatis)
   const recentContainer = document.getElementById('home-recent-transactions');
   if (recentContainer) {
     if (!state.transactions.length) {
@@ -276,20 +361,20 @@ function renderHomePage() {
         const isTf = tx.type === 'transfer';
         const amountSign = isExp ? '-' : (isInc ? '+' : '↔ ');
         const amountColor = isExp ? 'text-gray-100' : (isInc ? 'text-green-400' : 'text-purple-300');
-        const iconClass = isExp ? 'fa-arrow-up text-red-400' : (isInc ? 'fa-arrow-down text-green-400' : 'fa-paper-plane text-purple-400');
+        const catInfo = getCategoryIcon(tx.category_name, tx.type);
 
         return `
-          <div class="glass p-3.5 sm:p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
-            <div class="flex items-center gap-3.5">
-              <div class="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
-                <i class="fas ${iconClass} text-sm"></i>
+          <div class="glass p-3 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl ${catInfo.bg} flex items-center justify-center shrink-0">
+                <i class="fas ${catInfo.icon} text-sm ${catInfo.color}"></i>
               </div>
               <div>
-                <p class="font-bold text-sm text-white leading-tight">${escapeHtml(tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi'))}</p>
-                <p class="text-xs text-gray-400 mt-0.5">${formatDate(tx.date)} ${tx.notes ? '• ' + escapeHtml(tx.notes) : ''}</p>
+                <p class="font-bold text-xs sm:text-[13px] text-white leading-tight">${escapeHtml(tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi'))}</p>
+                <p class="text-[11px] text-gray-400 mt-0.5">${formatDate(tx.date)} ${tx.notes ? '• ' + escapeHtml(tx.notes) : ''}</p>
               </div>
             </div>
-            <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
+            <span class="font-extrabold text-xs sm:text-[13.5px] ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
           </div>
         `;
       }).join('');
@@ -681,22 +766,23 @@ function renderTransactionsPage() {
     const txItems = groups[dateLabel].map(tx => {
       const isExp = tx.type === 'expense';
       const isInc = tx.type === 'income';
+      const isTf = tx.type === 'transfer';
       const amountSign = isExp ? '-' : (isInc ? '+' : '↔ ');
       const amountColor = isExp ? 'text-gray-100' : (isInc ? 'text-green-400' : 'text-purple-300');
-      const icon = isExp ? 'fa-shopping-bag' : (isInc ? 'fa-arrow-down text-green-400' : 'fa-paper-plane text-purple-400');
+      const catInfo = getCategoryIcon(tx.category_name, tx.type);
 
       return `
-        <div class="glass p-3.5 sm:p-4 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
-          <div class="flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
-              <i class="fas ${icon} text-sm text-gray-300"></i>
+        <div class="glass p-3 rounded-2xl flex items-center justify-between hover:bg-white/10 transition">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl ${catInfo.bg} flex items-center justify-center shrink-0">
+              <i class="fas ${catInfo.icon} text-sm ${catInfo.color}"></i>
             </div>
             <div>
-              <p class="font-bold text-sm text-white leading-tight">${escapeHtml(tx.category_name || (tx.type === 'transfer' ? 'Pindah Dana' : 'Transaksi'))}</p>
-              <p class="text-xs text-gray-400 mt-0.5">${escapeHtml(tx.notes) || formatDate(tx.date)}</p>
+              <p class="font-bold text-xs sm:text-[13px] text-white leading-tight">${escapeHtml(tx.category_name || (isTf ? 'Pindah Dana' : 'Transaksi'))}</p>
+              <p class="text-[11px] text-gray-400 mt-0.5">${escapeHtml(tx.notes) || formatDate(tx.date)}</p>
             </div>
           </div>
-          <span class="font-extrabold text-sm sm:text-base ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
+          <span class="font-extrabold text-xs sm:text-[13.5px] ${amountColor}">${amountSign}${formatRupiah(tx.amount)}</span>
         </div>
       `;
     }).join('');
@@ -1864,7 +1950,16 @@ function bindAppEvents() {
       });
       tabBtn.className = 'btn-filter-tab flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition bg-white/10 text-white';
       state.txFilter.tab = tabBtn.getAttribute('data-tab');
-      renderTransactionsPage();
+      
+      const listEl = document.getElementById('transactions-grouped-list');
+      if (listEl) {
+        listEl.classList.remove('filter-fade-in');
+        void listEl.offsetWidth; // trigger reflow agar animasi berjalan ulang dengan mulus
+        renderTransactionsPage();
+        listEl.classList.add('filter-fade-in');
+      } else {
+        renderTransactionsPage();
+      }
     });
   });
 
