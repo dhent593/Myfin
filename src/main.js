@@ -134,11 +134,17 @@ function applyTheme(isLight) {
 
   if (isLight) {
     document.body.classList.add('light-mode');
+    document.documentElement.classList.add('light-mode');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f8fafc');
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', '#f8fafc');
     if (icon) icon.className = 'fas fa-sun text-yellow-500';
     if (ball) ball.style.transform = 'translateX(20px)';
     if (toggleBg) toggleBg.classList.replace('bg-gray-600', 'bg-[#5b55f9]');
   } else {
     document.body.classList.remove('light-mode');
+    document.documentElement.classList.remove('light-mode');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#1a1b2f');
+    document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.setAttribute('content', '#1a1b2f');
     if (icon) icon.className = 'fas fa-moon text-gray-300';
     if (ball) ball.style.transform = 'translateX(0px)';
     if (toggleBg) toggleBg.classList.replace('bg-[#5b55f9]', 'bg-gray-600');
@@ -201,7 +207,7 @@ function renderHomePage() {
         const solidColor = pocket.color || '#5b55f9';
 
         return `
-          <div class="w-[136px] min-w-[136px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/20 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
+          <div class="pocket-solid-card w-[136px] min-w-[136px] shrink-0 snap-start rounded-[20px] p-3.5 relative overflow-hidden transition-all cursor-pointer group active:scale-[0.98] shadow-md shadow-black/15 flex flex-col justify-between" style="background-color: ${solidColor};" onclick="window.dompetkuNavigate('wallet')">
             <div>
               <p class="text-xs font-bold text-white/95 truncate mb-1">${pocket.name}</p>
               <h4 class="text-[15px] font-black text-white tracking-tight leading-snug mb-2 truncate">${formatRupiah(balance)}</h4>
@@ -427,7 +433,7 @@ function renderWalletPage() {
           <div class="pocket-drag-item glass p-4 rounded-2xl cursor-grab active:cursor-grabbing hover:bg-white/10 transition relative overflow-hidden border border-white/5" data-id="${p.id}">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md" style="background-color: ${p.color || '#5b55f9'}">
+                <div class="pocket-icon-badge w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-md" style="background-color: ${p.color || '#5b55f9'}">
                   <i class="fas ${p.icon || 'fa-wallet'} text-sm"></i>
                 </div>
                 <div>

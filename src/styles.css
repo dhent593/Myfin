@@ -244,81 +244,223 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* ==============================================================================
-   LIGHT MODE OVERRIDES (Faithful to index-refference.html)
+   LIGHT MODE OVERRIDES (Modern Clean FinTech Theme)
    ============================================================================== */
+html.light-mode {
+    background-color: #f8fafc;
+}
 body.light-mode { 
-    background-color: #e2e8f0; 
+    background-color: #f1f5f9; 
     color: #0f172a; 
 }
 body.light-mode .app-bg { 
     background-color: #f8fafc; 
 }
+body.light-mode .mobile-container {
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08) !important;
+}
 
-/* Typography overrides */
+/* Typography Overrides */
 body.light-mode .text-gray-400, 
 body.light-mode .text-gray-300, 
 body.light-mode .text-gray-500 { 
     color: #64748b !important; 
 }
 body.light-mode .text-gray-100 { 
-    color: #1e293b !important; 
+    color: #0f172a !important; 
 }
-body.light-mode .text-white:not(.card-gradient *):not(.btn-gradient *):not(.badge-white) { 
+body.light-mode .text-purple-300,
+body.light-mode .text-purple-400 { 
+    color: #5b55f9 !important; 
+}
+body.light-mode .text-green-400 {
+    color: #16a34a !important;
+}
+body.light-mode .text-red-400 {
+    color: #dc2626 !important;
+}
+
+/* Base text-white override: exclude all solid color cards, badges, and gradient buttons */
+body.light-mode .text-white:not(.card-gradient *):not(.btn-gradient *):not(.badge-white):not(.pocket-solid-card *):not(.pocket-icon-badge *):not(#nav-btn-add *):not([data-keep-white]):not([data-keep-white] *) { 
     color: #0f172a !important; 
 }
 
-/* Backgrounds & Borders overrides */
-body.light-mode .bg-white\/5 { background-color: rgba(0,0,0,0.04) !important; }
-body.light-mode .bg-white\/10 { background-color: rgba(0,0,0,0.08) !important; }
-body.light-mode .bg-white\/20 { background-color: rgba(0,0,0,0.12) !important; }
+/* Ensure white text remains crisp on gradient cards, solid pocket cards, and primary buttons */
+body.light-mode .card-gradient *, 
+body.light-mode .btn-gradient *,
+body.light-mode .pocket-solid-card *,
+body.light-mode .pocket-icon-badge *,
+body.light-mode #nav-btn-add * { 
+    color: #ffffff !important; 
+}
+body.light-mode .pocket-solid-card .text-white\/90,
+body.light-mode .pocket-solid-card .text-white\/85,
+body.light-mode .pocket-solid-card .text-white\/80 {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+body.light-mode .pocket-solid-card .text-white\/95 {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Net Worth Card in Light Mode: subtle shadow without purple haze */
+body.light-mode .card-gradient {
+    box-shadow: 0 10px 25px rgba(91, 85, 249, 0.22) !important;
+}
+body.light-mode .card-gradient .bg-white\/20 {
+    background-color: rgba(255, 255, 255, 0.25) !important;
+}
+body.light-mode .card-gradient .bg-white\/10 {
+    background-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Cards & Glassmorphism in Light Mode */
+body.light-mode .glass { 
+    background: #ffffff !important; 
+    border: 1px solid rgba(0, 0, 0, 0.08) !important; 
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.03) !important;
+}
+body.light-mode .glass-input { 
+    background: #ffffff !important; 
+    border: 1px solid rgba(0, 0, 0, 0.12) !important; 
+    color: #0f172a !important; 
+}
+body.light-mode .glass-input::placeholder {
+    color: #94a3b8 !important;
+}
+body.light-mode .glass-input:focus { 
+    background: #ffffff !important; 
+    border-color: #5b55f9 !important; 
+    box-shadow: 0 0 0 3px rgba(91, 85, 249, 0.15) !important;
+}
+
+/* Backgrounds & Borders Overrides */
+body.light-mode .bg-white\/5 { background-color: rgba(0, 0, 0, 0.04) !important; }
+body.light-mode .bg-white\/10 { background-color: rgba(0, 0, 0, 0.08) !important; }
+body.light-mode .bg-white\/20 { background-color: rgba(0, 0, 0, 0.12) !important; }
 body.light-mode .border-white\/5,
 body.light-mode .border-white\/10,
 body.light-mode .border-white\/20 { 
-    border-color: rgba(0,0,0,0.08) !important; 
+    border-color: rgba(0, 0, 0, 0.08) !important; 
 }
 
-/* Glassmorphism overrides */
-body.light-mode .glass { 
-    background: rgba(255, 255, 255, 0.85); 
-    border: 1px solid rgba(255, 255, 255, 1); 
-    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+/* Border Dashed (Add Pocket Card) */
+body.light-mode .border-dashed {
+    border-color: rgba(0, 0, 0, 0.14) !important;
+    background: #ffffff !important;
 }
-body.light-mode .glass-input { 
-    background: rgba(0, 0, 0, 0.03); 
-    border: 1px solid rgba(0, 0, 0, 0.12); 
-    color: #0f172a; 
+body.light-mode .border-dashed:hover {
+    border-color: #5b55f9 !important;
+    background: rgba(91, 85, 249, 0.04) !important;
 }
-body.light-mode .glass-input:focus { 
-    background: rgba(255,255,255,0.95); 
-    border-color: #5b55f9; 
+body.light-mode .border-dashed .text-gray-300 {
+    color: #475569 !important;
+}
+body.light-mode .border-dashed:hover .text-gray-300 {
+    color: #5b55f9 !important;
 }
 
-/* Nav bar overrides */
+/* Nav Bar in Light Mode */
 body.light-mode .nav-bar { 
-    background-color: rgba(255, 255, 255, 0.96) !important; 
-    border: none !important; 
-    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.08) !important;
+    background: rgba(255, 255, 255, 0.98) !important; 
+    border-top: 1px solid rgba(0, 0, 0, 0.07) !important; 
+    box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.05) !important;
+}
+body.light-mode .nav-btn.active,
+body.light-mode .nav-btn.active i { 
+    color: #5b55f9 !important; 
+}
+body.light-mode .nav-btn:not(.active),
+body.light-mode .nav-btn:not(.active) i { 
+    color: #94a3b8 !important; 
+}
+body.light-mode .nav-btn:not(.active):hover i { 
+    color: #475569 !important; 
 }
 body.light-mode #nav-btn-add {
     background-color: #5b55f9 !important;
+    box-shadow: 0 4px 16px rgba(91, 85, 249, 0.35) !important;
 }
 
-/* Keep gradient contents white */
-body.light-mode .card-gradient *, 
-body.light-mode .btn-gradient * { 
-    color: #ffffff !important; 
+/* Filter Tabs & Selectors */
+body.light-mode .btn-filter-tab.bg-white\/10 {
+    background-color: #5b55f9 !important;
+    color: #ffffff !important;
 }
-body.light-mode .card-gradient .text-gray-400 { 
-    color: rgba(255,255,255,0.85) !important; 
+body.light-mode #btn-tx-type-expense.bg-white\/10,
+body.light-mode #btn-tx-type-income.bg-white\/10,
+body.light-mode #btn-tx-type-transfer.bg-white\/10 {
+    background-color: #5b55f9 !important;
+    color: #ffffff !important;
 }
 
-/* Dynamic Nav Colors */
-body:not(.light-mode) .nav-btn.active { color: #ffffff !important; }
-body.light-mode .nav-btn.active { color: #5b55f9 !important; }
+/* Amount Input in Add Transaction */
+body.light-mode #input-tx-amount {
+    color: #0f172a !important;
+}
+
+/* Select Options & Date Picker */
+body.light-mode select.glass-input option {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+}
+body.light-mode input[type="date"] {
+    color: #0f172a !important;
+}
+
+/* Secondary Button in Sign In */
+body.light-mode #btn-secondary-auth {
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #334155 !important;
+}
+body.light-mode #btn-secondary-auth:hover {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+}
+
+/* Logout Button */
+body.light-mode #btn-logout {
+    background: #ffffff !important;
+    border-color: rgba(239, 68, 68, 0.25) !important;
+    color: #dc2626 !important;
+}
+body.light-mode #btn-logout:hover {
+    background: #fef2f2 !important;
+}
+
+/* Donut Chart Background Track */
+body.light-mode #donut-bg-track {
+    stroke: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Modals in Light Mode */
+body.light-mode .modal-backdrop {
+    background-color: rgba(15, 23, 42, 0.45) !important;
+}
+body.light-mode .modal-content {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+    color: #0f172a !important;
+}
+
+/* Toast Notifications */
+body.light-mode #toast-container .glass {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+body.light-mode #toast-container span {
+    color: #0f172a !important;
+}
 
 /* Hover Effects */
 body.light-mode .hover\:bg-white\/10:hover { 
-    background-color: rgba(0,0,0,0.06) !important; 
+    background-color: rgba(0, 0, 0, 0.04) !important; 
+}
+body.light-mode .hover\:bg-white\/5:hover { 
+    background-color: rgba(0, 0, 0, 0.02) !important; 
 }
 
 /* Drag & Drop Pocket Reorder Styles */

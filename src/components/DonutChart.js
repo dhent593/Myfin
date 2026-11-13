@@ -81,6 +81,7 @@ export function renderDonutChart(containerEl, items = [], centerTitle = 'Total',
       <div class="relative w-[${size}px] h-[${size}px] my-2">
         <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" class="transform -rotate-90">
           <circle 
+            id="donut-bg-track"
             cx="${size / 2}" 
             cy="${size / 2}" 
             r="${radius}" 
